@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Buy Phase</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* One dark look on purpose: it copies the in-game buy screen layout. */
+:root{
+  --bg:#0b171a; --panel:rgba(255,255,255,.07); --panel-hi:rgba(255,255,255,.12); --line:rgba(255,255,255,.14);
+  --teal:#6fe3c4; --teal-dim:#2c6f63; --teal-bar:#2b6d62; --fg:#e9f3f1; --muted:#93aaa6; --red:#ff7a7a; --gold:#e6c25a;
+  --sans:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(1200px 700px at 30% 10%,#17353a 0%,#0b171a 60%,#070e10 100%) fixed;color:var(--fg);font-family:var(--sans);min-height:100vh;
+  -webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit}
+.wrap{max-width:780px;margin:0 auto;padding:12px 16px 28px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.cr{font-size:30px;font-weight:700;letter-spacing:.02em;color:var(--teal);line-height:1}
+.cr small{font-size:13px;color:var(--muted);font-weight:500;margin-left:6px;letter-spacing:.08em}
+.score{flex:1;min-width:160px;text-align:center;font-size:18px;font-weight:600;letter-spacing:.08em}
+.score small{display:block;font-size:12px;color:var(--gold);letter-spacing:.14em;min-height:14px}
+.lock{background:var(--teal);color:#06231d;border:0;padding:9px 18px;font-weight:700;letter-spacing:.14em;font-size:15px;cursor:pointer;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.lock:disabled{opacity:.4;cursor:default}
+.sb{background:var(--panel);border:1px solid var(--line);margin-bottom:8px;padding:6px 8px;display:grid;gap:4px}
+.sbr{display:flex;align-items:center;gap:8px}
+.sbr b{width:58px;font-size:12px;letter-spacing:.14em;font-weight:700;color:var(--muted)}
+.sbr .n{width:22px;font-size:24px;font-weight:700;line-height:1;text-align:center}
+.sbr.me .n,.sbr.me .m{color:var(--teal)} .sbr.foe .n,.sbr.foe .m{color:var(--red)}
+.tr{flex:1;display:flex;align-items:center;min-width:0;border-left:1px solid var(--line);padding-left:6px}
+.tr i{flex:1 1 0;min-width:0;height:14px;display:flex;align-items:center;justify-content:center}
+.tr i.d::after{content:"";width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.28)}
+.tr i svg{width:100%;max-width:16px;height:auto}
+.tr i.cur::after{background:var(--gold);width:5px;height:5px}
+.tr i.hf{flex:0 0 12px;position:relative}
+.tr i.hf::after{content:"";border:4px solid transparent;border-bottom-color:var(--gold);border-top:0;width:0;height:0;background:none}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:6px}
+.slot{background:var(--panel);border:1px solid var(--line);padding:5px 6px;cursor:pointer;text-align:left;min-width:0}
+.slot b{display:block;font-size:11px;color:var(--muted);letter-spacing:.14em;font-weight:600}
+.slot span{display:block;font-size:14px;font-weight:600;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot i{font-style:normal;font-size:12px;color:var(--muted)}
+.slot.on{border-color:var(--teal);background:rgba(111,227,196,.14)}
+.foe{font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:8px;min-height:15px}
+.foe em{font-style:normal;color:var(--fg)}
+.board{display:grid;grid-template-columns:repeat(5,1fr) .85fr;grid-template-rows:auto 1fr 1fr;gap:6px;margin-bottom:8px}
+.board>.cell[data-g]{grid-row:2/4;min-height:230px}
+.col{display:flex;flex-direction:column;gap:4px;min-width:0}
+.hd{background:var(--teal-bar);font-size:12px;font-weight:700;letter-spacing:.16em;text-align:center;padding:3px 0;margin-top:0;white-space:nowrap;overflow:hidden}
+.col .hd:not(:first-child){margin-top:6px}
+.cell{min-height:0;background:var(--panel);border:2px solid transparent;display:flex;flex-direction:column;justify-content:space-between;padding:4px 6px;cursor:pointer;position:relative;text-align:left;min-width:0}
+.cell:hover{background:var(--panel-hi)}
+.cell.on{border-color:var(--teal);background:rgba(111,227,196,.16)}
+.cell.off{opacity:.38;cursor:default}
+.cell.off:hover{background:var(--panel)}
+.cell svg{flex:0 0 auto;width:100%;flex:1 1 0;min-height:0;margin:14px 0 6px;fill:rgba(255,255,255,.85);pointer-events:none}
+.cell .sp{display:none}
+.cell.sh{min-height:110px}
+.cell.sh .nm{white-space:normal;line-height:1.05;font-size:14px}
+.cell.sh svg{flex:0 0 auto;width:34px;height:34px;align-self:center;margin:8px 0 4px}
+.px{font-size:15px;color:var(--muted);letter-spacing:.04em;position:relative}
+.px .own{color:var(--teal);font-weight:700;letter-spacing:.1em}
+.nm{font-size:16px;font-weight:600;letter-spacing:.06em;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{position:absolute;right:4px;top:3px;font-size:11px;color:var(--teal);font-weight:700;letter-spacing:.08em}
+.abil{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.abil .cell{min-height:54px;flex:none}
+.note{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-top:8px;text-align:center}
+/* reveal */
+.ov{position:fixed;inset:0;background:rgba(3,10,12,.78);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+.ov.show{display:flex}
+.card{background:#10262a;border:1px solid var(--teal-dim);width:100%;max-width:460px;padding:16px}
+.card h2{margin:0 0 10px;font-size:20px;letter-spacing:.14em;font-weight:700;color:var(--teal)}
+.fr{display:grid;grid-template-columns:22px 1fr 54px 48px;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:16px;letter-spacing:.04em;min-height:34px}
+.fr .vs{color:var(--muted);font-size:13px}
+.fr .pc{font-size:13px;color:var(--muted);text-align:right}
+.fr .w{color:var(--teal);font-weight:700;text-align:right}
+.fr .l{color:var(--red);font-weight:700;text-align:right}
+.sum{margin-top:12px;font-size:18px;letter-spacing:.08em;min-height:44px}
+.sum small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.card .lock{margin-top:12px}
+@media (max-width:520px){.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="cr" id="cr"></div>
+    <div class="score" id="score"></div>
+    <button class="lock" id="lock">LOCK IN</button>
+  </div>
+  <div class="slots" id="slots"></div>
+  <div class="foe" id="foe"></div>
+  <div class="board" id="board"></div>
+  <div class="sb" id="sb"></div>
+  <div class="note">1-5 pick a slot, Enter locks in.</div>
+</div>
+<div class="ov" id="ov"><div class="card" id="card"></div></div>
+<script>
+const SIL={
+  pistol:'M18 12h52v10H44l-3 6h-8l2-6H18z M22 22h12l-4 14H20z',
+  smg:'M2 14h8v8H2z M10 14h62v8H48l-2 4H34l-2 14h-9l3-14H10z M72 16h22v4H72z',
+  rifle:'M6 14h64v8H52l-4 6H38l-3 12h-9l3-12H6z M70 16h26v4H70z M30 10h16v4H30z',
+  sniper:'M4 15h62v7H4z M66 17h32v3H66z M28 7h22v6H28z M16 22h10l-2 14h-8z',
+  shotgun:'M4 15h72v8H4z M76 16h20v5H76z M46 23h18v5H46z M14 23h10l-3 13h-9z',
+  mg:'M4 13h58v12H4z M62 17h34v4H62z M28 25h20v12H28z M12 25h10l-2 11h-8z'
+};
+// id, name, header, price, power, silhouette
+const GUNS=[
+  ['classic','CLASSIC','side',0,0,'pistol'],['ghost','GHOST','side',500,1,'pistol'],['spectre','SPECTRE','smg',1600,3,'smg'],
+  ['vandal','VANDAL','rifle',2900,5,'rifle'],['operator','OPERATOR','sniper',4700,8,'sniper']
+].map(([id,name,grp,price,pw,sil])=>({id,name,grp,price,pw,sil}));
+const BY={};GUNS.forEach(g=>BY[g.id]=g);
+const SH=[{name:'NO SHIELD',price:0,pw:0},{name:'LIGHT SHIELDS',price:400,pw:1},{name:'HEAVY SHIELDS',price:1000,pw:2}];
+const TAG=['','+L','+H'];
+const lab=(id,l)=>BY[id].name+(l?' '+TAG[l]:'');
+const HEAD={side:'SIDEARMS',smg:'SMGS',rifle:'RIFLES',sniper:'SNIPER RIFLES'};
+const LOSS=[9500,12000,14500];           // 5 slots x 1,900 / 2,400 / 2,900
+const fmt=n=>n.toLocaleString('en-US');
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const $=id=>document.getElementById(id);
+const S={};
+
+function newGame(){
+  Object.assign(S,{played:0,me:0,foe:0,bank:[4000,4000],kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,pistol:false,ot:false,half:false,phase:'buy'});
+  startRound();
+}
+function startRound(){
+  const n=S.played+1;
+  S.ot=S.me>=12&&S.foe>=12;
+  S.half=n===13;
+  S.pistol=n===1||n===13;
+  if(S.pistol){S.bank=[4000,4000];S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)];S.streak=[0,0]}
+  if(S.ot){S.bank=[25000,25000];S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)]}
+  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.phase='buy';
+  render();
+}
+const cost=(i,id)=>id===S.kept[0][i]?0:BY[id].price;
+const shCost=(i,l)=>l===S.ksh[0][i]?0:SH[l].price;
+const spent=()=>S.picks.reduce((a,id,i)=>a+cost(i,id)+shCost(i,S.shp[i]),0);
+const left=()=>S.bank[0]-spent();
+
+function pick(id){
+  if(S.phase!=='buy')return;
+  const i=S.sel,g=BY[id];
+  if(S.pistol&&g.grp!=='side')return;
+  if(S.picks[i]===id){S.picks[i]=S.kept[0][i];render();return}
+  if(cost(i,id)>left()+cost(i,S.picks[i]))return;
+  S.picks[i]=id;S.sel=(i+1)%5;render();
+}
+
+function pickShield(l){
+  if(S.phase!=='buy')return;
+  const i=S.sel;
+  if(S.shp[i]===l){S.shp[i]=S.ksh[0][i];render();return}
+  if(shCost(i,l)>left()+shCost(i,S.shp[i]))return;
+  S.shp[i]=l;render();
+}
+
+function render(){
+  const lossNext=LOSS[Math.min(S.streak[0]+1,3)-1];
+  $('cr').innerHTML='¤ '+fmt(left())+'<small>NEXT LOSS +¤'+fmt(lossNext)+'</small>';
+  const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':S.pistol?'PISTOL ROUND':S.played===11?'LAST ROUND OF THE HALF':'';
+  $('score').innerHTML='ROUND '+(S.played+1)+'<small>'+flag+'</small>';
+  const X='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="m"><circle cx="6" cy="6" r="4.6"/><path d="M3.6 3.6l4.8 4.8M8.4 3.6l-4.8 4.8"/></svg>';
+  const N=Math.max(24,S.hist.length+1);
+  const track=side=>{let h='';for(let i=0;i<N;i++){
+    if(i===12)h+='<i class="hf"></i>';
+    const r=S.hist[i];
+    h+=r===undefined?'<i class="d'+(i===S.hist.length?' cur':'')+'"></i>':(r===side?'<i>'+X+'</i>':'<i class="d"></i>');
+  }return h};
+  $('sb').innerHTML=`<div class="sbr me"><b>YOU</b><span class="n">${S.me}</span><div class="tr">${track(true)}</div></div><div class="sbr foe"><b>ENEMY</b><span class="n">${S.foe}</span><div class="tr">${track(false)}</div></div>`;
+  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}"><b>SLOT ${i+1}</b><span>${lab(id,S.shp[i])}</span><i>${cost(i,id)+shCost(i,S.shp[i])?'¤'+fmt(cost(i,id)+shCost(i,S.shp[i])):(id!=='classic'||S.shp[i])?'KEPT':'FREE'}</i></button>`).join('');
+  const fk=S.kept[1];
+  $('foe').innerHTML='ENEMY GUNS: '+(fk.every((x,i)=>x==='classic'&&!S.ksh[1][i])?'<em>ALL CLASSIC</em>':fk.map((x,i)=>'<em>'+lab(x,S.ksh[1][i])+'</em>').join(' · '));
+  const avail=left()+cost(S.sel,S.picks[S.sel]);
+  const cell=(g,ix)=>{
+    const on=S.picks[S.sel]===g.id;
+    const owned=g.id===S.kept[0][S.sel];
+    const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy';
+    const tags=S.picks.map((p,i)=>p===g.id?i+1:'').filter(Boolean).join(' ');
+    return `<button class="cell ${on?'on':''} ${off&&!on?'off':''}" data-g="${g.id}" style="grid-column:${ix+1}"><svg viewBox="0 0 100 40"><path d="${SIL[g.sil]}"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(g.price)}</span><span class="nm">${g.name}</span></button>`;
+  };
+  let h=Object.keys(HEAD).map(k=>`<div class="hd" style="grid-column:span ${GUNS.filter(g=>g.grp===k).length}">${HEAD[k]}</div>`).join('')+GUNS.map(cell).join('');
+  const avs=left()+shCost(S.sel,S.shp[S.sel]);
+  h+='<div class="hd" style="grid-column:6;grid-row:1">ARMOR</div>'+[1,2].map(l=>{
+    const on=S.shp[S.sel]===l,owned=S.ksh[0][S.sel]===l,off=(!owned&&SH[l].price>avs)||S.phase!=='buy';
+    const tags=S.shp.map((p,i)=>p===l?i+1:'').filter(Boolean).join(' ');
+    return `<button class="cell sh ${on?'on':''} ${off&&!on?'off':''}" data-sh="${l}" style="grid-column:6;grid-row:${l+1}"><svg viewBox="0 0 40 40"><path d="M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z${l===2?' M20 10l7 2.500v6c0 5-3 9-7 11z':''}" fill-rule="evenodd"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(SH[l].price)}</span><span class="nm">${SH[l].name}</span></button>`;
+  }).join('');
+  $('board').innerHTML=h;
+  $('lock').disabled=S.phase!=='buy';
+}
+
+// enemy buy: picks a style at random, buys the best gun it can afford in each slot, then shields with what is left
+function botBuy(){
+  const bank=S.bank[1],kept=S.kept[1],out=[...kept],sh=[...S.ksh[1]];
+  const pool=GUNS.filter(g=>!S.pistol||g.grp==='side').sort((a,b)=>b.price-a.price);
+  const r=Math.random();
+  let style;
+  if(S.ot) style=r<.5?'even':'stack';
+  else if(bank<7000) style=r<.55?'save':r<.8?'even':'stack';
+  else style=r<.6?'even':r<.9?'stack':'save';
+  let bud=Array(5).fill(0);
+  if(style==='even')bud=bud.map(()=>bank/5*(.85+Math.random()*.3));
+  if(style==='stack'){const idx=[0,1,2,3,4].sort(()=>Math.random()-.5).slice(0,3);idx.forEach(i=>bud[i]=bank/3)}
+  let left=bank;
+  [0,1,2,3,4].sort(()=>Math.random()-.5).forEach(i=>{
+    const b=Math.min(bud[i],left);
+    const g=pool.find(g=>g.price<=b);
+    if(g&&g.price>BY[kept[i]].price){out[i]=g.id;left-=g.price}
+  });
+  if(style!=='save')[0,1,2,3,4].sort(()=>Math.random()-.5).forEach(i=>{
+    const l=left>=1000&&Math.random()<.5?2:left>=400&&Math.random()<.7?1:0;
+    if(l>sh[i]){sh[i]=l;left-=SH[l].price}
+  });
+  return {guns:out,sh};
+}
+
+function resolve(){
+  S.phase='reveal';render();
+  const me=[...S.picks],mesh=[...S.shp],fb=botBuy(),foe=fb.guns,fsh=fb.sh;
+  const spend=[spent(),foe.reduce((a,id,i)=>a+(id===S.kept[1][i]?0:BY[id].price)+(fsh[i]===S.ksh[1][i]?0:SH[fsh[i]].price),0)];
+  const res=me.map((id,i)=>{
+    const a=BY[id],b=BY[foe[i]];
+    const chance=clamp(.5+.05*((a.pw+SH[mesh[i]].pw)-(b.pw+SH[fsh[i]].pw)),.05,.95);
+    return {a:lab(id,mesh[i]),b:lab(foe[i],fsh[i]),chance,win:Math.random()<chance};
+  });
+  const wins=res.filter(r=>r.win).length,won=wins>=3;
+  const gain=[0,0];
+  [0,1].forEach(s=>{
+    const w=s===0?won:!won,kills=(s===0?wins:5-wins)*200;
+    let inc;
+    if(w){S.streak[s]=0;inc=15000}else{S.streak[s]++;inc=LOSS[Math.min(S.streak[s],3)-1]}
+    gain[s]=inc+kills;
+    S.bank[s]=Math.min(45000,S.bank[s]-spend[s]+inc+kills);
+  });
+  S.kept[0]=me.map((id,i)=>res[i].win?id:'classic');
+  S.kept[1]=foe.map((id,i)=>res[i].win?'classic':id);
+  S.ksh[0]=mesh.map((l,i)=>res[i].win?l:0);
+  S.ksh[1]=fsh.map((l,i)=>res[i].win?0:l);
+  S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
+  const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
+
+  $('ov').classList.add('show');
+  $('card').innerHTML='<h2>ROUND '+S.played+'</h2><div id="rows"></div><div class="sum" id="sum"></div>';
+  res.forEach((r,i)=>setTimeout(()=>{
+    $('rows').insertAdjacentHTML('beforeend',`<div class="fr"><b>${i+1}</b><span>${r.a} <span class="vs">vs</span> ${r.b}</span><span class="pc">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'}">${r.win?'WIN':'LOSS'}</span></div>`);
+  },500*(i+1)));
+  setTimeout(()=>{
+    let t=won?'ROUND WON':'ROUND LOST';
+    $('sum').innerHTML=t+' · '+wins+'–'+(5-wins)+'<small>YOU EARNED ¤'+fmt(gain[0])+'</small>';
+    const b=document.createElement('button');b.className='lock';b.id='next';
+    if(over){
+      const w=S.me>S.foe;
+      $('sum').innerHTML=(w?'VICTORY':'DEFEAT')+' · '+S.me+'–'+S.foe+'<small>'+(w?'YOU WIN THE MATCH':'THE ENEMY WINS THE MATCH')+'</small>';
+      b.textContent='PLAY AGAIN';b.onclick=()=>{$('ov').classList.remove('show');newGame()};
+    }else{b.textContent='NEXT ROUND';b.onclick=()=>{$('ov').classList.remove('show');startRound()}}
+    $('card').appendChild(b);b.focus();
+  },500*(res.length+1)+200);
+}
+
+$('board').addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
+$('slots').addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c&&S.phase==='buy'){S.sel=+c.dataset.s;render()}});
+$('lock').onclick=()=>{if(S.phase==='buy')resolve()};
+document.addEventListener('keydown',e=>{
+  if(S.phase==='buy'){
+    if(e.key>='1'&&e.key<='5'){S.sel=+e.key-1;render()}
+    else if(e.key==='Enter')resolve();
+  }else if(e.key==='Enter'){const n=$('next');if(n)n.click()}
+});
+newGame();
+</script>
+</body>
+</html>
