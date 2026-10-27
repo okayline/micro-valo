@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.17 — 2026-10-27 01:35 HST
+
+Header touch-ups, honest round labels, and buying for an agent you pick.
+
+- Changed: the grey round text is smaller, "ROUND 2:" is smaller than the description, and the blank space under the header is halved.
+- Removed: the ANTI-ECO label, since the enemy's money isn't known.
+- Changed: BONUS only shows the round after winning a PISTOL or ECO round.
+- Added: after you click an agent, buying a gun no longer moves on to the next agent, so you can also buy its shield. The agent stays lit until you click another agent or press Space.
+- Changed: the version label says v1.17.
+- Not changed: the rules, money and prices.
+- Checked: in a browser, clicking an agent then a gun and a shield bought both and kept them lit, no console errors. Round labels checked with made-up set-ups.
+
 ## v1.16 — 2026-10-27 01:30 HST
 
 Honest round label in the header.

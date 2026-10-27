@@ -20,7 +20,7 @@ button{font:inherit;color:inherit}
 .wrap{max-width:780px;margin:0 auto;padding:12px 16px 28px}
 .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
 .cr{font-size:20px;font-weight:700;letter-spacing:.02em;color:var(--teal);line-height:1}
-.cr small{font-size:20px;color:var(--muted);font-weight:500;margin-left:10px;letter-spacing:.08em}
+.cr small{font-size:17px;color:var(--muted);font-weight:500;margin-left:10px;letter-spacing:.08em}.cr small .rn{font-size:13px}
 .score{flex:1;min-width:160px;text-align:center;font-size:18px;font-weight:600;letter-spacing:.08em}
 .score small{display:block;font-size:12px;color:var(--gold);letter-spacing:.14em;min-height:14px}
 .lock{background:var(--teal);color:#06231d;border:0;padding:9px 18px;font-weight:700;letter-spacing:.14em;font-size:15px;cursor:pointer;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
@@ -50,7 +50,7 @@ button{font:inherit;color:inherit}
 .nl{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:.08em}
 .lock.big{font-size:24px;padding:16px 48px;margin-top:6px;clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%)}
 #slots .slot:not(.on),.bal.dim{opacity:.45}
-.lbl.first{margin-top:22px}
+.lbl.first{margin-top:11px}
 .foes{margin-bottom:6px}
 .foes .slot{cursor:default;padding:5px 6px}
 .slot .ic{display:flex;align-items:center;height:56px}
@@ -108,7 +108,7 @@ button{font:inherit;color:inherit}
 .sum small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
 .card .lock{margin-top:12px}
 .card .lock.wait{visibility:hidden}
-@media (max-width:520px){.cr small{font-size:13px;letter-spacing:.02em;margin-left:6px}.ver{font-size:11px}.bal{font-size:16px}.lock.big{font-size:18px;padding:12px 28px}.fr{grid-template-columns:16px 72px 16px 72px 1fr 32px 50px;gap:4px}.fr .w,.fr .l{font-size:19px;letter-spacing:0}.fr .ic svg.g{width:46px}.fr .ic svg.s{width:20px;height:20px}.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(52px,calc(100% - 20px))}
+@media (max-width:520px){.cr small{font-size:12px;letter-spacing:.02em;margin-left:6px}.cr small .rn{font-size:10px}.ver{font-size:11px}.bal{font-size:16px}.lock.big{font-size:18px;padding:12px 28px}.fr{grid-template-columns:16px 72px 16px 72px 1fr 32px 50px;gap:4px}.fr .w,.fr .l{font-size:19px;letter-spacing:0}.fr .ic svg.g{width:46px}.fr .ic svg.s{width:20px;height:20px}.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(52px,calc(100% - 20px))}
 .slot .ic svg.g:only-child{width:min(52px,100%)}.slot .ic svg.s{width:16px;height:16px;margin-left:3px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:16px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
 </style>
 </head>
@@ -116,7 +116,7 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.16</span>
+    <span class="ver">v1.17</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -164,7 +164,7 @@ function startRound(){
   S.pistol=n===1||n===13;
   if(S.pistol){S.bank=wallets(START);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)];S.streak=[0,0]}
   if(S.ot){S.bank=wallets(OT);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)]}
-  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.step='gun';S.gd=Array(5).fill(false);S.sd=Array(5).fill(false);S.phase='buy';
+  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.hold=-1;S.step='gun';S.gd=Array(5).fill(false);S.sd=Array(5).fill(false);S.phase='buy';
   render();
 }
 const cost=(i,id)=>id===S.kept[0][i]?0:BY[id].price;
@@ -190,7 +190,8 @@ function pick(id){
   // clicking the gun bought this round again sells it back (to the agent's round-start gun)
   if(S.picks[i]===id&&id!==S.kept[0][i]){S.picks[i]=S.kept[0][i];S.gd[i]=false;render();return}
   if((S.pistol&&g.grp!=='side')||cost(i,id)>left(i)+cost(i,S.picks[i]))return;
-  S.picks[i]=id;S.gd[i]=true;advance();render();
+  S.picks[i]=id;S.gd[i]=true;if(S.hold!==i)advance();   // an agent you picked yourself stays lit for its shield
+  render();
 }
 function pickShield(l){
   if(S.phase!=='buy'||(S.step!=='shield'&&S.step!=='gun'))return;
@@ -204,7 +205,7 @@ function pickShield(l){
 }
 function skip(){
   if(S.phase!=='buy'||(S.step!=='gun'&&S.step!=='shield'))return;
-  (S.step==='gun'?S.gd:S.sd)[S.sel]=true;advance();render();
+  S.hold=-1;(S.step==='gun'?S.gd:S.sd)[S.sel]=true;advance();render();
 }
 
 // gun picture plus shield picture (plain = light, cut-out = heavy), used by both slot rows
@@ -216,15 +217,16 @@ function render(){
   // what kind of round this is, from your money and the enemy's visible kept guns (never the enemy bank)
   const roundType=()=>{
     if(S.pistol)return 'PISTOL ROUND';
-    if(S.hist[S.hist.length-1]===true&&S.kept[0].every(g=>BY[g].price<2900))return 'BONUS';   // won last round and still holding only cheap guns
+    if(S.hist[S.hist.length-1]===true&&(S.prevType==='PISTOL ROUND'||S.prevType==='ECO')&&S.kept[0].every(g=>BY[g].price<2900))return 'BONUS';   // won a pistol or eco round and still holding only cheap guns
     const rdy=S.bank[0].filter((b,i)=>BY[S.kept[0][i]].pw>=5?(S.ksh[0][i]>0||b>=SH[1].price):b>=3300).length;   // has, or can buy, a rifle and a light shield
     const poor=S.bank[0].filter((b,i)=>b<1600&&BY[S.kept[0][i]].price<1600).length;  // can't afford a Spectre
-    if(rdy===5)return S.kept[1].every(g=>g==='classic')?'ANTI-ECO':'FULL BUY';
+    if(rdy===5)return 'FULL BUY';
     if(poor>=3)return 'ECO';
     return 'HALF BUY';
   };
-  const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':roundType()+(S.played===11?' · LAST ROUND OF THE HALF':'');
-  $('cr').innerHTML='MICRO VALO<small>ROUND '+(S.played+1)+(flag?': '+flag:'')+'</small>';
+  const rt=S.ot||S.half?'':roundType();S.type=rt;   // remembered so the next round can tell what this one was
+  const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':rt+(S.played===11?' · LAST ROUND OF THE HALF':'');
+  $('cr').innerHTML='MICRO VALO<small>'+(flag?'<span class="rn">ROUND '+(S.played+1)+':</span> '+flag:'ROUND '+(S.played+1))+'</small>';
   const X='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="m"><circle cx="6" cy="6" r="4.6"/><path d="M3.6 3.6l4.8 4.8M8.4 3.6l-4.8 4.8"/></svg>';
   const N=Math.max(24,S.hist.length+1);
   const track=side=>{let h='';for(let i=0;i<N;i++){
@@ -240,7 +242,7 @@ function render(){
   const gi=S.sel,avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
     const [col,row]=POS[g.id];
-    const on=S.step==='done'&&S.gd[S.sel]&&S.picks[S.sel]===g.id;   // lit only once the lit agent has chosen this gun
+    const on=(S.step==='done'||S.hold===S.sel)&&S.gd[S.sel]&&S.picks[S.sel]===g.id;   // lit only once the lit agent has chosen this gun
     const owned=g.id===S.kept[0][gi];
     const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy'||S.step!=='gun';
     const tags=S.picks.map((p,i)=>p===g.id?i+1:'').filter(Boolean).join(' ');
@@ -299,7 +301,7 @@ function resolve(){
   S.kept[1]=foe.map((id,i)=>res[i].win?'classic':id);
   S.ksh[0]=mesh.map((l,i)=>res[i].win?l:0);
   S.ksh[1]=fsh.map((l,i)=>res[i].win?0:l);
-  S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
+  S.prevType=S.type;S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
   const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
 
   // The box opens at full size showing the round title, line numbers, your guns, "vs", the
@@ -328,8 +330,8 @@ $('board').addEventListener('mousemove',()=>$('board').classList.remove('still')
 $('board').addEventListener('click',e=>{$('board').classList.add('still');const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
 // click another agent to restart its buy track (gun first, shield after) and keep what it holds;
 // right-click any agent to clear it back to its round-start gun and shield
-function restart(i,clear){if(clear){S.picks[i]=S.kept[0][i];S.shp[i]=S.ksh[0][i]}S.gd[i]=false;S.sd[i]=false;S.sel=i;S.step='gun';render()}
-['albl','slots','bal'].forEach(id=>$(id).addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(!c||S.phase!=='buy')return;const i=+c.dataset.s;if(i!==S.sel||S.step==='done')restart(i,false)}));
+function restart(i,clear){if(clear){S.picks[i]=S.kept[0][i];S.shp[i]=S.ksh[0][i]}S.gd[i]=false;S.sd[i]=false;S.sel=i;S.hold=i;S.step='gun';render()}
+['albl','slots','bal'].forEach(id=>$(id).addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(!c||S.phase!=='buy')return;const i=+c.dataset.s;if(i!==S.sel||S.step==='done')restart(i,false);else S.hold=i}));
 ['albl','slots','bal'].forEach(id=>$(id).addEventListener('contextmenu',e=>{const c=e.target.closest('[data-s]');if(!c)return;e.preventDefault();if(S.phase!=='buy')return;restart(+c.dataset.s,true)}));
 $('lock').onclick=()=>{if(S.phase==='buy')resolve()};
 document.addEventListener('keydown',e=>{
