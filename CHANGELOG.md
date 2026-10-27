@@ -7,6 +7,8 @@ Faster buying: click gun, shield, gun, shield... and the slots fill in order.
 - Changed: clicking a gun now stays on that slot. Clicking a shield finishes the slot and moves to the next one.
 - Changed: to skip a shield, click the next gun. It goes into the next slot.
 - Added: right-click a slot to undo it. Its gun and shield go back to what it had at the start of the round.
+- Changed: your slot buttons show the gun picture and shield picture, like the enemy row. The name under it is the gun only.
+- Removed: the "+L" / "+H" text in your slot buttons (the shield picture shows it now). The fight results still use it.
 - Changed: the hint line under the slots mentions right-click.
 - Removed: buying a gun no longer jumps straight to the next slot.
 - Removed: clicking a slot's gun again no longer undoes it (to change a gun, pick the slot and click another gun). Clicking a shield you bought this round still undoes it.
