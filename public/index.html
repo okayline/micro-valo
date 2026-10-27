@@ -78,14 +78,21 @@ button{font:inherit;color:inherit}
 .ov.show{display:flex}
 .card{background:#10262a;border:1px solid var(--teal-dim);width:100%;max-width:460px;padding:16px}
 .card h2{margin:0 0 10px;font-size:20px;letter-spacing:.14em;font-weight:700;color:var(--teal)}
-.fr{display:grid;grid-template-columns:22px 1fr 54px 48px;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:16px;letter-spacing:.04em;min-height:34px}
-.fr .vs{color:var(--muted);font-size:13px}
+.fr{display:grid;grid-template-columns:18px 1fr 20px 1fr 40px 44px;gap:6px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line);font-size:16px;letter-spacing:.04em;height:48px}
+.fr .vs{color:var(--muted);font-size:13px;text-align:center}
+.fr .ic{display:flex;align-items:center;height:36px;min-width:0}
+.fr .ic svg.g{flex:none;width:min(70px,calc(100% - 28px));height:auto;aspect-ratio:5/2;fill:rgba(255,255,255,.85)}
+.fr .ic svg.s{flex:none;width:24px;height:24px;margin-left:4px;fill:rgba(255,255,255,.85)}
+.fr .foe .ic{flex-direction:row-reverse}
+.fr .foe .ic svg{transform:scaleX(-1)}
+.fr .foe .ic svg.s{margin:0 4px 0 0}
 .fr .pc{font-size:13px;color:var(--muted);text-align:right}
 .fr .w{color:var(--teal);font-weight:700;text-align:right}
 .fr .l{color:var(--red);font-weight:700;text-align:right}
 .sum{margin-top:12px;font-size:18px;letter-spacing:.08em;min-height:44px}
 .sum small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
 .card .lock{margin-top:12px}
+.card .lock.wait{visibility:hidden}
 @media (max-width:520px){.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(46px,calc(100% - 24px))}.slot .ic svg.s{width:20px;height:20px;margin-left:4px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
 </style>
 </head>
@@ -121,8 +128,6 @@ const GUNS=[
 ].map(([id,name,grp,price,pw,sil])=>({id,name,grp,price,pw,sil}));
 const BY={};GUNS.forEach(g=>BY[g.id]=g);
 const SH=[{name:'NO SHIELD',price:0,pw:0},{name:'LIGHT SHIELDS',price:400,pw:1},{name:'HEAVY SHIELDS',price:1000,pw:2}];
-const TAG=['','+L','+H'];
-const lab=(id,l)=>BY[id].name+(l?' '+TAG[l]:'');
 const POS={classic:[1,2],ghost:[1,3],spectre:[2,0],vandal:[3,2],phantom:[3,3],operator:[4,0]}; // [column, row], row 0 = both rows
 const LOSS=[9500,12000,14500];           // 5 slots x 1,900 / 2,400 / 2,900
 const fmt=n=>n.toLocaleString('en-US');
@@ -240,7 +245,7 @@ function resolve(){
   const res=me.map((id,i)=>{
     const a=BY[id],b=BY[foe[i]];
     const chance=clamp(.5+.05*((a.pw+SH[mesh[i]].pw)-(b.pw+SH[fsh[i]].pw)),.05,.95);
-    return {a:lab(id,mesh[i]),b:lab(foe[i],fsh[i]),chance,win:Math.random()<chance};
+    return {a:icons(id,mesh[i]),b:icons(foe[i],fsh[i]),chance,win:Math.random()<chance};
   });
   const wins=res.filter(r=>r.win).length,won=wins>=3;
   const gain=[0,0];
@@ -259,20 +264,21 @@ function resolve(){
   const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
 
   $('ov').classList.add('show');
-  $('card').innerHTML='<h2>ROUND '+S.played+'</h2><div id="rows"></div><div class="sum" id="sum"></div>';
+  // full size from the start: 5 empty lines that fill in one at a time, and a hidden button
+  $('card').innerHTML='<h2>ROUND '+S.played+'</h2><div id="rows">'+res.map((r,i)=>`<div class="fr" id="fr${i}"><b>${i+1}</b></div>`).join('')+'</div><div class="sum" id="sum"></div><button class="lock wait" id="next">NEXT ROUND</button>';
   res.forEach((r,i)=>setTimeout(()=>{
-    $('rows').insertAdjacentHTML('beforeend',`<div class="fr"><b>${i+1}</b><span>${r.a} <span class="vs">vs</span> ${r.b}</span><span class="pc">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'}">${r.win?'WIN':'LOSS'}</span></div>`);
+    $('fr'+i).innerHTML=`<b>${i+1}</b><span>${r.a}</span><span class="vs">vs</span><span class="foe">${r.b}</span><span class="pc">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'}">${r.win?'WIN':'LOSS'}</span>`;
   },500*(i+1)));
   setTimeout(()=>{
     let t=won?'ROUND WON':'ROUND LOST';
     $('sum').innerHTML=t+' · '+wins+'–'+(5-wins)+'<small>YOU EARNED ¤'+fmt(gain[0])+'</small>';
-    const b=document.createElement('button');b.className='lock';b.id='next';
+    const b=$('next');b.classList.remove('wait');
     if(over){
       const w=S.me>S.foe;
       $('sum').innerHTML=(w?'VICTORY':'DEFEAT')+' · '+S.me+'–'+S.foe+'<small>'+(w?'YOU WIN THE MATCH':'THE ENEMY WINS THE MATCH')+'</small>';
       b.textContent='PLAY AGAIN';b.onclick=()=>{$('ov').classList.remove('show');newGame()};
     }else{b.textContent='NEXT ROUND';b.onclick=()=>{$('ov').classList.remove('show');startRound()}}
-    $('card').appendChild(b);b.focus();
+    b.focus();
   },500*(res.length+1)+200);
 }
 

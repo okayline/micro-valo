@@ -11,6 +11,9 @@ Faster buying: click gun, shield, gun, shield... and the slots fill in order.
 - Removed: the "+L" / "+H" text in your slot buttons (the shield picture shows it now). The fight results still use it.
 - Changed: your slot pictures keep the same size when a shield is added (space for the shield is always kept). On phone width the gun picture is smaller to make room.
 - Changed: the "SLOT 1" to "SLOT 5" labels are now "AGENT 1" to "AGENT 5".
+- Changed: the fight box is full size from the start. It shows 5 empty lines that fill in one at a time, and the Next Round button's space is kept, so the box no longer grows.
+- Changed: each fight line shows your gun and shield pictures on the left and the enemy's on the right, turned to face yours, in place of the names.
+- Removed: the gun names and "+L" / "+H" text from the fight lines.
 - Changed: the hint line under the slots mentions right-click.
 - Removed: buying a gun no longer jumps straight to the next slot.
 - Changed: after picking an agent, clicking the gun it bought this round undoes it (back to its round-start gun). Clicking a shield you bought this round also undoes it.
