@@ -165,6 +165,8 @@ const left=i=>S.bank[0][i]-cost(i,S.picks[i])-shCost(i,S.shp[i]);
 const gunSlot=()=>S.step==='shield'?(S.sel+1)%5:S.sel;
 function pick(id){
   if(S.phase!=='buy')return;
+  // clicking the gun the current agent holds sells it back (to its round-start gun)
+  if(S.step==='shield'&&S.picks[S.sel]===id){S.picks[S.sel]=S.kept[0][S.sel];S.step='gun';render();return}
   const i=gunSlot(),g=BY[id];
   if(S.pistol&&g.grp!=='side')return;
   // clicking the gun an agent already bought this round undoes it

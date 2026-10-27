@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4 — 2026-10-26 22:50 HST
+
+Left-click sells, like the real buy menu.
+
+- Changed: clicking the gun your current agent just bought sells it back (the agent goes back to its round-start gun and the money returns). Clicking a different gun still skips the shield and goes on the next agent.
+- Removed: clicking the same gun again no longer buys it for the next agent.
+- Not checked: how it feels to play. Checked in a browser, no console errors.
+
 ## v1.3 — 2026-10-26 22:40 HST
 
 Each agent has its own money now, like the real game.
