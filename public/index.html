@@ -101,7 +101,7 @@ button{font:inherit;color:inherit}
   <div class="board" id="board"></div>
   <div class="lbl" style="margin-top:8px"><div class="hd">SLOT 1</div><div class="hd">SLOT 2</div><div class="hd">SLOT 3</div><div class="hd">SLOT 4</div><div class="hd">SLOT 5</div></div>
   <div class="slots" id="slots"></div>
-  <div class="note">1-5 pick a slot, Enter locks in.</div>
+  <div class="note">1-5 pick a slot, right-click a slot to undo it, Enter locks in.</div>
 </div>
 <div class="ov" id="ov"><div class="card" id="card"></div></div>
 <script>
@@ -273,6 +273,8 @@ function resolve(){
 
 $('board').addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
 $('slots').addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c&&S.phase==='buy'){S.sel=+c.dataset.s;S.step='gun';render()}});
+// right-click a slot: undo this round's buy in that slot
+$('slots').addEventListener('contextmenu',e=>{const c=e.target.closest('[data-s]');if(!c)return;e.preventDefault();if(S.phase!=='buy')return;const i=+c.dataset.s;S.picks[i]=S.kept[0][i];S.shp[i]=S.ksh[0][i];S.sel=i;S.step='gun';render()});
 $('lock').onclick=()=>{if(S.phase==='buy')resolve()};
 document.addEventListener('keydown',e=>{
   if(S.phase==='buy'){
