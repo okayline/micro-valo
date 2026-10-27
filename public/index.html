@@ -107,7 +107,7 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.4</span>
+    <span class="ver">v1.5</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -137,7 +137,7 @@ const BY={};GUNS.forEach(g=>BY[g.id]=g);
 const SH=[{name:'NO SHIELD',price:0,pw:0},{name:'LIGHT SHIELDS',price:400,pw:1},{name:'HEAVY SHIELDS',price:1000,pw:2}];
 const POS={classic:[1,2],ghost:[1,3],spectre:[2,0],vandal:[3,2],phantom:[3,3],operator:[4,0]}; // [column, row], row 0 = both rows
 // money is per agent, like the real game
-const LOSS=[1900,2400,2900],WIN=3000,KILL=200,CAP=9000,START=800,OT=5000;
+const LOSS=[1900,2400,2900],WIN=2000,KILL=200,CAP=9000,START=800,OT=5000;
 const wallets=n=>[Array(5).fill(n),Array(5).fill(n)];
 const fmt=n=>n.toLocaleString('en-US');
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
