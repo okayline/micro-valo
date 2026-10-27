@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.9 — 2026-10-27 00:40 HST
+
+Gun sizes on the buy board.
+
+- Changed: the Vandal and Phantom pictures are about 25% bigger. Same drawings, just scaled up.
+- Changed: the Spectre picture is 10% smaller. Same drawing.
+- Added: the version label says v1.9.
+- Not changed: the agent and enemy panels, the rules, money and prices.
+- Checked: in a browser at computer and phone width, no console errors.
+
 ## v1.8 — 2026-10-27 00:30 HST
 
 Spectre touch-ups, and the shield pictures swap places.
