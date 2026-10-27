@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.14 — 2026-10-27 01:20 HST
+
+Clearer buying: outlines, going back, selling back and an honest OWNED label.
+
+- Changed: a gun is lit only once the lit agent has chosen it. Hovering a gun you can buy outlines it, and the outline stays hidden after a click until the mouse moves.
+- Changed: the lit agent's whole column (name, gun and shield panel, money) is outlined green while it is their turn.
+- Added: click an agent's name, gun panel or money to restart its buying and keep what it holds. Right-click clears it fully.
+- Added: shields can be bought during the gun part too, and the ARMOR heading is no longer dimmed there.
+- Changed: clicking a dimmed gun or shield does nothing. Space still skips an agent.
+- Added: clicking the gun or shield you bought this round sells it back, money returns and the agent stays lit.
+- Changed: OWNED shows on the gun and shield the lit agent is holding. Classic shows its price when not held.
+- Fixed: going back to an agent during the shield part and buying a gun no longer jumps back to an earlier agent; it moves on to the next one along.
+- Changed: the version label says v1.14.
+- Not changed: the rules, money and prices.
+- Checked: in a browser, buying, selling back, restarting an agent and the OWNED labels, no console errors.
+
 ## v1.13 — 2026-10-27 01:00 HST
 
 Five guns, then five shields, take two, plus picture and panel touch-ups.
