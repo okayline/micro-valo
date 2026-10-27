@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.8 — 2026-10-27 00:30 HST
+
+Spectre touch-ups, and the shield pictures swap places.
+
+- Changed: the Spectre has a thinner body and suppressor, a slightly curved magazine with a tilted square end, and a square-cut back grip.
+- Changed: the half-open shield picture is now Light Shields, with a bigger opening. Heavy Shields is now the solid one.
+- Added: the version label says v1.8.
+- Not changed: the rules, money and prices.
+- Checked: in a browser at computer and phone width, no console errors.
+
 ## v1.7 — 2026-10-27 00:20 HST
 
 New Spectre and Operator pictures.
