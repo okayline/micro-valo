@@ -28,7 +28,7 @@ Faster buying and a slower, clearer fight reveal.
 - Changed: your agent panels show gun and shield pictures, like the enemy row, and keep the same size when a shield is added.
 - Changed: "SLOT 1" to "SLOT 5" are now "AGENT 1" to "AGENT 5". The hint line mentions right-click.
 - Changed: the fight box is full size from the start. Each line shows your gun and shield, "vs", and the enemy's facing yours.
-- Changed: the fight box shows the round, line numbers, your guns and a dim button first, then reveals one thing per second: each enemy side, its WIN or LOSS, the round score, the money, and the button lights up. On the last round the title turns to VICTORY or DEFEAT.
+- Changed: the fight box shows the round, line numbers, your guns and a dim button first, then reveals one thing per second: each enemy side, its WIN or LOSS, the round score, the money, and the button lights up. The Next Round button sits on the right, beside the round result. On the last round the title turns to VICTORY or DEFEAT.
 - Removed: buying a gun no longer jumps to the next slot. The gun names and "+L" / "+H" text are gone from your panels and the fight lines. The separate "YOU WIN THE MATCH" line is gone.
 - Not checked: how it feels over a full match. Checked in a browser at computer and phone width, over two rounds, with no console errors.
 
