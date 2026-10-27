@@ -107,7 +107,7 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.5</span>
+    <span class="ver">v1.6</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -145,14 +145,13 @@ const $=id=>document.getElementById(id);
 const S={};
 
 function newGame(){
-  Object.assign(S,{bonus:false,bonusNext:false,played:0,me:0,foe:0,bank:wallets(START),kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,step:'gun',pistol:false,ot:false,half:false,phase:'buy'});
+  Object.assign(S,{played:0,me:0,foe:0,bank:wallets(START),kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,step:'gun',pistol:false,ot:false,half:false,phase:'buy'});
   startRound();
 }
 function startRound(){
   const n=S.played+1;
   S.ot=S.me>=12&&S.foe>=12;
   S.half=n===13;
-  S.bonus=S.bonusNext;S.bonusNext=false;   // the round right after you won a pistol round
   S.pistol=n===1||n===13;
   if(S.pistol){S.bank=wallets(START);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)];S.streak=[0,0]}
   if(S.ot){S.bank=wallets(OT);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)]}
@@ -195,7 +194,7 @@ function render(){
   // what kind of round this is, from your money and the enemy's visible kept guns (never the enemy bank)
   const roundType=()=>{
     if(S.pistol)return 'PISTOL ROUND';
-    if(S.bonus)return 'BONUS';
+    if(S.hist[S.hist.length-1]===true&&S.kept[0].every(g=>BY[g].price<2900))return 'BONUS';   // won last round and still holding only cheap guns
     const rdy=S.bank[0].filter((b,i)=>b>=3300||BY[S.kept[0][i]].pw>=5).length;      // can have a Vandal and a light shield
     const poor=S.bank[0].filter((b,i)=>b<1600&&BY[S.kept[0][i]].price<1600).length;  // can't afford a Spectre
     if(rdy>=3)return S.kept[1].every(g=>g==='classic')?'ANTI-ECO':'FULL BUY';
@@ -278,7 +277,6 @@ function resolve(){
   S.kept[1]=foe.map((id,i)=>res[i].win?'classic':id);
   S.ksh[0]=mesh.map((l,i)=>res[i].win?l:0);
   S.ksh[1]=fsh.map((l,i)=>res[i].win?0:l);
-  S.bonusNext=S.pistol&&won;
   S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
   const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
 
