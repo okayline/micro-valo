@@ -19,8 +19,8 @@ body{background:radial-gradient(1200px 700px at 30% 10%,#17353a 0%,#0b171a 60%,#
 button{font:inherit;color:inherit}
 .wrap{max-width:780px;margin:0 auto;padding:12px 16px 28px}
 .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.cr{font-size:30px;font-weight:700;letter-spacing:.02em;color:var(--teal);line-height:1}
-.cr small{font-size:13px;color:var(--muted);font-weight:500;margin-left:6px;letter-spacing:.08em}
+.cr{font-size:20px;font-weight:700;letter-spacing:.02em;color:var(--teal);line-height:1}
+.cr small{font-size:20px;color:var(--muted);font-weight:500;margin-left:10px;letter-spacing:.08em}
 .score{flex:1;min-width:160px;text-align:center;font-size:18px;font-weight:600;letter-spacing:.08em}
 .score small{display:block;font-size:12px;color:var(--gold);letter-spacing:.14em;min-height:14px}
 .lock{background:var(--teal);color:#06231d;border:0;padding:9px 18px;font-weight:700;letter-spacing:.14em;font-size:15px;cursor:pointer;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
@@ -108,15 +108,15 @@ button{font:inherit;color:inherit}
 .sum small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
 .card .lock{margin-top:12px}
 .card .lock.wait{visibility:hidden}
-@media (max-width:520px){.cr small{font-size:10px;letter-spacing:.02em;margin-left:4px}.ver{font-size:11px}.bal{font-size:16px}.lock.big{font-size:18px;padding:12px 28px}.fr{grid-template-columns:16px 72px 16px 72px 1fr 32px 50px;gap:4px}.fr .w,.fr .l{font-size:19px;letter-spacing:0}.fr .ic svg.g{width:46px}.fr .ic svg.s{width:20px;height:20px}.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(52px,calc(100% - 20px))}
-.slot .ic svg.g:only-child{width:min(52px,100%)}.slot .ic svg.s{width:16px;height:16px;margin-left:3px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
+@media (max-width:520px){.cr small{font-size:13px;letter-spacing:.02em;margin-left:6px}.ver{font-size:11px}.bal{font-size:16px}.lock.big{font-size:18px;padding:12px 28px}.fr{grid-template-columns:16px 72px 16px 72px 1fr 32px 50px;gap:4px}.fr .w,.fr .l{font-size:19px;letter-spacing:0}.fr .ic svg.g{width:46px}.fr .ic svg.s{width:20px;height:20px}.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(52px,calc(100% - 20px))}
+.slot .ic svg.g:only-child{width:min(52px,100%)}.slot .ic svg.s{width:16px;height:16px;margin-left:3px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:16px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.14</span>
+    <span class="ver">v1.15</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -224,7 +224,7 @@ function render(){
     return 'HALF BUY';
   };
   const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':roundType()+(S.played===11?' · LAST ROUND OF THE HALF':'');
-  $('cr').innerHTML='MICRO VALO<small>ROUND '+(S.played+1)+(flag?' · '+flag:'')+'</small>';
+  $('cr').innerHTML='MICRO VALO<small>ROUND '+(S.played+1)+(flag?': '+flag:'')+'</small>';
   const X='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="m"><circle cx="6" cy="6" r="4.6"/><path d="M3.6 3.6l4.8 4.8M8.4 3.6l-4.8 4.8"/></svg>';
   const N=Math.max(24,S.hist.length+1);
   const track=side=>{let h='';for(let i=0;i<N;i++){

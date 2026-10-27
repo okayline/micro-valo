@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.15 — 2026-10-27 01:25 HST
+
+Header touch-up.
+
+- Changed: the MICRO VALO title is smaller and the round line is bigger, and it reads "ROUND 2: ECO" with a colon.
+- Changed: the version label says v1.15.
+- Not changed: the rules, money and prices.
+- Checked: in a browser at computer and phone width, a long round line fits, no console errors.
+
 ## v1.14 — 2026-10-27 01:20 HST
 
 Clearer buying: outlines, going back, selling back and an honest OWNED label.
