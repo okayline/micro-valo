@@ -102,7 +102,6 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <div class="score" id="score"></div>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -183,10 +182,9 @@ const SHD='M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z';
 const icons=(id,l)=>`<div class="ic"><svg class="g" viewBox="0 0 100 40"><path d="${SIL[BY[id].sil]}"/></svg>${l?`<svg class="s" viewBox="0 0 40 40"><path d="${SHD}${l===2?' M20 10l7 2.5v6c0 5-3 9-7 11z':''}" fill-rule="evenodd"/></svg>`:''}</div>`;
 function render(){
   const lossNext=LOSS[Math.min(S.streak[0]+1,3)-1];
-  $('money').innerHTML='¤ '+fmt(left(S.sel));
-  $('cr').innerHTML='MICRO VALO<small>AGENT '+(S.sel+1)+' · NEXT LOSS +¤'+fmt(lossNext)+'</small>';
+  $('money').innerHTML='¤ '+fmt(left(S.sel))+'<small>NEXT LOSS +¤'+fmt(lossNext)+'</small>';
   const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':S.pistol?'PISTOL ROUND':S.played===11?'LAST ROUND OF THE HALF':'';
-  $('score').innerHTML='ROUND '+(S.played+1)+'<small>'+flag+'</small>';
+  $('cr').innerHTML='MICRO VALO<small>ROUND '+(S.played+1)+(flag?' · '+flag:'')+'</small>';
   const X='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="m"><circle cx="6" cy="6" r="4.6"/><path d="M3.6 3.6l4.8 4.8M8.4 3.6l-4.8 4.8"/></svg>';
   const N=Math.max(24,S.hist.length+1);
   const track=side=>{let h='';for(let i=0;i<N;i++){
