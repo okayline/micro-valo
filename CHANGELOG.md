@@ -9,7 +9,8 @@ Each agent has its own money now, like the real game.
 - Changed: each agent's money left shows in a small panel under its agent panel. The agent panel shows only gun, shield and name, not what they cost.
 - Changed: bigger shield pictures in the agent and enemy panels (computer width; phone width stays the same so the guns fit). The big number at the top shows the selected agent's money.
 - Added: "MICRO VALO" at the top left, with the round number and round type (pistol, halftime, overtime) beside it.
-- Changed: the selected agent's money (big number), the next loss bonus and the LOCK IN button moved to a bar under the agents.
+- Changed: the next loss bonus sits right under the agents' money panels, and LOCK IN moved under the agents and is much bigger. The money panels use big numbers.
+- Removed: the big money number for the selected agent.
 - Removed: the round number in the top middle.
 - Changed: the enemy buys per agent the same way.
 - Changed: in the fight lines, the enemy's shield sits to the right of its gun.
