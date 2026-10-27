@@ -108,7 +108,7 @@ button{font:inherit;color:inherit}
   <div class="slots foes" id="foes"></div>
   <div class="sb" id="sb"></div>
   <div class="board" id="board"></div>
-  <div class="lbl" style="margin-top:8px"><div class="hd">AGENT 1</div><div class="hd">AGENT 2</div><div class="hd">AGENT 3</div><div class="hd">AGENT 4</div><div class="hd">AGENT 5</div></div>
+  <div class="lbl" style="margin-top:8px" id="albl"></div>
   <div class="slots" id="slots"></div>
 </div>
 <div class="ov" id="ov"><div class="card" id="card"></div></div>
@@ -192,7 +192,8 @@ function render(){
     h+=r===undefined?'<i class="d'+(i===S.hist.length?' cur':'')+'"></i>':(r===side?'<i>'+X+'</i>':'<i class="d"></i>');
   }return h};
   $('sb').innerHTML=`<div class="sbr foe"><b>ENEMY</b><span class="n">${S.foe}</span><div class="tr">${track(false)}</div></div><div class="sbr me"><b>YOU</b><span class="n">${S.me}</span><div class="tr">${track(true)}</div></div>`;
-  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span><i>BALANCE: ¤${fmt(left(i))}</i></button>`).join('');
+  $('albl').innerHTML=S.picks.map((_,i)=>`<div class="hd">AGENT ${i+1} · ¤${fmt(left(i))}</div>`).join('');
+  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span></button>`).join('');
   $('foes').innerHTML=S.kept[1].map((id,i)=>`<div class="slot">${icons(id,S.ksh[1][i])}<span>${BY[id].name}</span></div>`).join('');
   const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
