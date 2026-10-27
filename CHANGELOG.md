@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.19 — 2026-10-27 01:55 HST
+
+- Removed: the win-chance percentages on the fight screen. The odds themselves are unchanged.
+- Changed: the version label says v1.19.
+- Not changed: the rules, money and prices.
+- Checked: in a browser, the percentage slots are empty and all five results still show, no console errors.
+
 ## v1.18 — 2026-10-27 01:45 HST
 
 Round name on the fight screen, and fewer upsets.
