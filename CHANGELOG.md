@@ -11,6 +11,7 @@ Clearer buying: outlines, going back, selling back and an honest OWNED label.
 - Changed: clicking a dimmed gun or shield does nothing. Space still skips an agent.
 - Added: clicking the gun or shield you bought this round sells it back, money returns and the agent stays lit.
 - Changed: OWNED shows on the gun and shield the lit agent is holding. Classic shows its price when not held.
+- Fixed: going back to an agent during the shield part and buying a gun no longer jumps back to an earlier agent; it moves on to the next one along.
 - Changed: the version label says v1.14.
 - Not changed: the rules, money and prices.
 - Checked: in a browser, buying, selling back, restarting an agent and the OWNED labels, no console errors.

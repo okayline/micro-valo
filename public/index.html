@@ -180,8 +180,7 @@ function advance(){
   for(let k=1;k<=5;k++){const j=(S.sel+k)%5;if(!arr[j]){S.sel=j;return}}
   if(S.step==='gun'){
     for(let i=0;i<5;i++)if(!canShield(i))S.sd[i]=true;   // nothing to buy for this agent
-    const j=S.sd.indexOf(false);
-    if(j>=0){S.step='shield';S.sel=j;return}
+    for(let k=1;k<=5;k++){const j=(S.sel+k)%5;if(!S.sd[j]){S.step='shield';S.sel=j;return}}   // next one along, not back to the first
   }
   S.step='done';
 }
