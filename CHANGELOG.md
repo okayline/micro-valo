@@ -2,10 +2,10 @@
 
 ## v1.5 — 2026-10-26 23:00 HST
 
-Round 2 can no longer be a full Vandal buy.
+Round 2 can no longer be a full Vandal buy, and money is lower overall.
 
 - Changed: the round win pays each agent ¤2,000, was ¤3,000. Now an agent that spends on a Ghost in round 1 has about ¤2,500 in round 2, under the ¤2,900 Vandal. Only an agent that spends nothing in round 1 (¤800 + ¤2,000 + ¤200) can afford one.
-- Not changed: the loss bonuses (¤1,900 / ¤2,400 / ¤2,900), so a long loss streak now pays more than a win.
+- Changed: the loss bonuses are cut to ¤1,300 / ¤1,600 / ¤1,900 per agent for the first, second and third loss in a row (were ¤1,900 / ¤2,400 / ¤2,900), so a win still pays more than any loss.
 - Not checked: how the new money feels over a full match.
 
 ## v1.4 — 2026-10-26 22:50 HST
