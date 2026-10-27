@@ -107,7 +107,7 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.9</span>
+    <span class="ver">v1.10</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -155,34 +155,38 @@ function startRound(){
   S.pistol=n===1||n===13;
   if(S.pistol){S.bank=wallets(START);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)];S.streak=[0,0]}
   if(S.ot){S.bank=wallets(OT);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)]}
-  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.step='gun';S.phase='buy';
+  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.step='gun';S.gd=Array(5).fill(false);S.sd=Array(5).fill(false);S.phase='buy';
   render();
 }
 const cost=(i,id)=>id===S.kept[0][i]?0:BY[id].price;
 const shCost=(i,l)=>l===S.ksh[0][i]?0:SH[l].price;
 const left=i=>S.bank[0][i]-cost(i,S.picks[i])-shCost(i,S.shp[i]);
 
-// Buy order: gun, shield, gun, shield... A gun stays on its slot; a shield finishes the slot.
-// A gun clicked while the slot waits for a shield skips the shield and goes to the next slot.
-const gunSlot=()=>S.step==='shield'?(S.sel+1)%5:S.sel;
-function pick(id){
-  if(S.phase!=='buy')return;
-  // clicking the gun the current agent holds sells it back (to its round-start gun)
-  if(S.step==='shield'&&S.picks[S.sel]===id){S.picks[S.sel]=S.kept[0][S.sel];S.step='gun';render();return}
-  const i=gunSlot(),g=BY[id];
-  if(S.pistol&&g.grp!=='side')return;
-  // clicking the gun an agent already bought this round undoes it
-  if(S.step==='gun'&&S.picks[i]===id&&id!==S.kept[0][i]){S.picks[i]=S.kept[0][i];render();return}
-  if(cost(i,id)>left(i)+cost(i,S.picks[i]))return;
-  S.picks[i]=id;S.sel=i;S.step='shield';render();
+// Buy order: a gun for each agent in turn, then a shield for each agent in turn. Clicking a gun buys it
+// for the current agent and moves on; after the last agent the shields start again at agent 1.
+// Click the gun an agent holds (OWNED) to keep it for free, or press Space / click the lit agent to skip a shield.
+function advance(){
+  const arr=S.step==='gun'?S.gd:S.sd;
+  for(let k=1;k<=5;k++){const j=(S.sel+k)%5;if(!arr[j]){S.sel=j;return}}
+  if(S.step==='gun'){const j=S.sd.indexOf(false);if(j>=0){S.step='shield';S.sel=j;return}}
+  S.step='done';
 }
-
+function pick(id){
+  if(S.phase!=='buy'||S.step!=='gun')return;
+  const i=S.sel,g=BY[id];
+  if(S.pistol&&g.grp!=='side')return;
+  if(cost(i,id)>left(i)+cost(i,S.picks[i]))return;
+  S.picks[i]=id;S.gd[i]=true;advance();render();
+}
 function pickShield(l){
-  if(S.phase!=='buy')return;
+  if(S.phase!=='buy'||S.step!=='shield')return;
   const i=S.sel;
-  if(S.shp[i]===l&&l!==S.ksh[0][i]){S.shp[i]=S.ksh[0][i];render();return}
   if(shCost(i,l)>left(i)+shCost(i,S.shp[i]))return;
-  S.shp[i]=l;S.sel=(i+1)%5;S.step='gun';render();
+  S.shp[i]=l;S.sd[i]=true;advance();render();
+}
+function skip(){
+  if(S.phase!=='buy'||(S.step!=='gun'&&S.step!=='shield'))return;
+  (S.step==='gun'?S.gd:S.sd)[S.sel]=true;advance();render();
 }
 
 // gun picture plus shield picture (plain = light, cut-out = heavy), used by both slot rows
@@ -215,19 +219,19 @@ function render(){
   $('bal').innerHTML=S.picks.map((_,i)=>`<div class="bal${i===S.sel?'':' dim'}">¤${fmt(left(i))}</div>`).join('');
   $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span></button>`).join('');
   $('foes').innerHTML=S.kept[1].map((id,i)=>`<div class="slot">${icons(id,S.ksh[1][i])}<span>${BY[id].name}</span></div>`).join('');
-  const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
+  const gi=S.sel,avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
     const [col,row]=POS[g.id];
     const on=S.picks[S.sel]===g.id;   // the agent's current gun stays lit, so you can click it to sell it
     const owned=g.id===S.kept[0][gi];
-    const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy';
+    const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy'||S.step!=='gun';
     const tags=S.picks.map((p,i)=>p===g.id?i+1:'').filter(Boolean).join(' ');
     return `<button class="cell ${on?'on':''} ${off&&!on?'off':''}" data-g="${g.id}" style="grid-column:${col};${row?`grid-row:${row};min-height:110px`:'grid-row:2/4'}"><svg viewBox="${g.id==='vandal'||g.id==='phantom'?'2 6 96 31':g.id==='spectre'?'-5.56 -2.22 111.11 44.44':'0 0 100 40'}"><path d="${SIL[g.sil]}"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(g.price)}</span><span class="nm">${g.name}</span></button>`;
   };
   let h=[['SIDEARMS',1],['SMGS',2],['RIFLES',3],['SNIPER RIFLES',4]].map(([t,c])=>`<div class="hd" style="grid-column:${c};grid-row:1">${t}</div>`).join('')+GUNS.map(cell).join('');
   const avs=left(S.sel)+shCost(S.sel,S.shp[S.sel]);
   h+='<div class="hd" style="grid-column:5;grid-row:1">ARMOR</div>'+[1,2].map(l=>{
-    const on=S.step==='shield'&&S.shp[S.sel]===l,owned=S.ksh[0][S.sel]===l,off=(!owned&&SH[l].price>avs)||S.phase!=='buy';
+    const on=S.step==='shield'&&S.shp[S.sel]===l,owned=S.ksh[0][S.sel]===l,off=(!owned&&SH[l].price>avs)||S.phase!=='buy'||S.step!=='shield';
     const tags=S.shp.map((p,i)=>p===l?i+1:'').filter(Boolean).join(' ');
     return `<button class="cell sh ${on?'on':''} ${S.step==='shield'&&!S.shp[S.sel]&&!off?'next':''} ${off&&!on?'off':''}" data-sh="${l}" style="grid-column:5;grid-row:${l+1}"><svg viewBox="0 0 40 40"><path d="M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z${l===1?' M20 8 L29 11 V19 C29 25 25.5 29.5 20 32z':''}" fill-rule="evenodd"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(SH[l].price)}</span><span class="nm">${SH[l].name}</span></button>`;
   }).join('');
@@ -303,13 +307,14 @@ function resolve(){
 }
 
 $('board').addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
-$('slots').addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c&&S.phase==='buy'){S.sel=+c.dataset.s;S.step='gun';render()}});
+$('slots').addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(!c||S.phase!=='buy')return;const i=+c.dataset.s;if(i===S.sel)skip();else{S.sel=i;render()}});
 // right-click a slot: undo this round's buy in that slot
-$('slots').addEventListener('contextmenu',e=>{const c=e.target.closest('[data-s]');if(!c)return;e.preventDefault();if(S.phase!=='buy')return;const i=+c.dataset.s;S.picks[i]=S.kept[0][i];S.shp[i]=S.ksh[0][i];S.sel=i;S.step='gun';render()});
+$('slots').addEventListener('contextmenu',e=>{const c=e.target.closest('[data-s]');if(!c)return;e.preventDefault();if(S.phase!=='buy')return;const i=+c.dataset.s;S.picks[i]=S.kept[0][i];S.shp[i]=S.ksh[0][i];S.gd[i]=false;S.sd[i]=false;S.sel=i;S.step='gun';render()});
 $('lock').onclick=()=>{if(S.phase==='buy')resolve()};
 document.addEventListener('keydown',e=>{
   if(S.phase==='buy'){
-    if(e.key>='1'&&e.key<='5'){S.sel=+e.key-1;S.step='gun';render()}
+    if(e.key>='1'&&e.key<='5'){S.sel=+e.key-1;render()}
+    else if(e.key===' '){e.preventDefault();skip()}
     else if(e.key==='Enter')resolve();
   }else if(e.key==='Enter'){const n=$('next');if(n&&n.onclick)n.click()}
 });

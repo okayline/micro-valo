@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.10 — 2026-10-27 00:45 HST
+
+New buying order: five guns, then five shields.
+
+- Changed: clicking a gun buys it for the lit agent and moves on to the next agent. After agent 5, the shields start at agent 1 and go through agent 5, then you press LOCK IN.
+- Changed: the guns are greyed out during the shield part, and the shields during the gun part.
+- Added: to keep an agent's gun, click the OWNED one (free). To skip a shield, press Space or click the lit agent.
+- Added: right-click an agent to clear its buys. It then gets its gun pick again, and later its shield pick again.
+- Changed: keys 1 to 5 and clicking an agent only select it (to see its money), they no longer restart that agent's buy.
+- Removed: the old gun-then-shield order, and clicking a bought gun or shield to sell it back.
+- Added: the version label says v1.10.
+- Not changed: the rules, money and prices.
+- Checked: in a browser, played a pistol round of buys with skips and shields, no console errors.
+
 ## v1.9 — 2026-10-27 00:40 HST
 
 Gun sizes on the buy board.
