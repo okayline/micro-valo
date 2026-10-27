@@ -80,9 +80,11 @@ button{font:inherit;color:inherit}
 .card h2{margin:0 0 10px;font-size:20px;letter-spacing:.14em;font-weight:700;color:var(--teal)}
 .fr{display:grid;grid-template-columns:18px 96px 18px 96px 1fr 40px 44px;gap:6px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line);font-size:16px;letter-spacing:.04em;height:48px}
 .fr .vs{color:var(--muted);font-size:13px;text-align:center}
+.card .hide{visibility:hidden}
 .fr .ic{display:flex;align-items:center;height:36px;min-width:0}
 .fr .ic svg.g{flex:none;width:66px;height:auto;aspect-ratio:5/2;fill:rgba(255,255,255,.85)}
 .fr .ic svg.s{flex:none;width:24px;height:24px;margin-left:4px;fill:rgba(255,255,255,.85)}
+.fr .ic{justify-content:flex-end}
 .fr .foe .ic{flex-direction:row-reverse}
 .fr .foe .ic svg{transform:scaleX(-1)}
 .fr .foe .ic svg.s{margin:0 4px 0 0}
@@ -263,23 +265,25 @@ function resolve(){
   S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
   const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
 
+  // The box opens at full size with everything hidden, then shows one thing per beat:
+  // title, then each fight line and its WIN/LOSS, then the result, the money, and the button.
+  const w=S.me>S.foe;
+  const head=over?(w?'VICTORY':'DEFEAT')+' · '+S.me+'–'+S.foe:(won?'ROUND WON':'ROUND LOST')+' · '+wins+'–'+(5-wins);
+  const sub=over?(w?'YOU WIN THE MATCH':'THE ENEMY WINS THE MATCH'):'YOU EARNED ¤'+fmt(gain[0]);
   $('ov').classList.add('show');
-  // full size from the start: 5 empty lines that fill in one at a time, and a hidden button
-  $('card').innerHTML='<h2>ROUND '+S.played+'</h2><div id="rows">'+res.map((r,i)=>`<div class="fr" id="fr${i}"><b>${i+1}</b></div>`).join('')+'</div><div class="sum" id="sum"></div><button class="lock wait" id="next">NEXT ROUND</button>';
-  res.forEach((r,i)=>setTimeout(()=>{
-    $('fr'+i).innerHTML=`<b>${i+1}</b><span>${r.a}</span><span class="vs">vs</span><span class="foe">${r.b}</span><span></span><span class="pc">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'}">${r.win?'WIN':'LOSS'}</span>`;
-  },500*(i+1)));
+  $('card').innerHTML='<h2 class="hide" id="ttl">ROUND '+S.played+'</h2><div id="rows">'
+    +res.map((r,i)=>`<div class="fr"><b class="hide" id="fn${i}">${i+1}</b><span class="hide" id="fa${i}">${r.a}</span><span class="vs hide" id="fv${i}">vs</span><span class="foe hide" id="fb${i}">${r.b}</span><span></span><span class="pc hide" id="fp${i}">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'} hide" id="fw${i}">${r.win?'WIN':'LOSS'}</span></div>`).join('')
+    +`</div><div class="sum"><span class="hide" id="sh">${head}</span><small class="hide" id="ss">${sub}</small></div><button class="lock hide" id="next">${over?'PLAY AGAIN':'NEXT ROUND'}</button>`;
+  const beats=[['ttl']];
+  res.forEach((r,i)=>beats.push(['fn'+i,'fa'+i,'fv'+i,'fb'+i,'fp'+i],['fw'+i]));
+  beats.push(['sh'],['ss'],['next']);
+  const BEAT=500;
+  beats.forEach((ids,k)=>setTimeout(()=>ids.forEach(id=>$(id).classList.remove('hide')),BEAT*(k+1)));
   setTimeout(()=>{
-    let t=won?'ROUND WON':'ROUND LOST';
-    $('sum').innerHTML=t+' · '+wins+'–'+(5-wins)+'<small>YOU EARNED ¤'+fmt(gain[0])+'</small>';
-    const b=$('next');b.classList.remove('wait');
-    if(over){
-      const w=S.me>S.foe;
-      $('sum').innerHTML=(w?'VICTORY':'DEFEAT')+' · '+S.me+'–'+S.foe+'<small>'+(w?'YOU WIN THE MATCH':'THE ENEMY WINS THE MATCH')+'</small>';
-      b.textContent='PLAY AGAIN';b.onclick=()=>{$('ov').classList.remove('show');newGame()};
-    }else{b.textContent='NEXT ROUND';b.onclick=()=>{$('ov').classList.remove('show');startRound()}}
+    const b=$('next');
+    b.onclick=over?()=>{$('ov').classList.remove('show');newGame()}:()=>{$('ov').classList.remove('show');startRound()};
     b.focus();
-  },500*(res.length+1)+200);
+  },BEAT*beats.length);
 }
 
 $('board').addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
@@ -291,7 +295,7 @@ document.addEventListener('keydown',e=>{
   if(S.phase==='buy'){
     if(e.key>='1'&&e.key<='5'){S.sel=+e.key-1;S.step='gun';render()}
     else if(e.key==='Enter')resolve();
-  }else if(e.key==='Enter'){const n=$('next');if(n)n.click()}
+  }else if(e.key==='Enter'){const n=$('next');if(n&&n.onclick)n.click()}
 });
 newGame();
 </script>
