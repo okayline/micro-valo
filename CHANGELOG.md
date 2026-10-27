@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.5 — 2026-10-26 23:00 HST
+## v1.5 — 2026-10-26 22:52 HST
 
 Round 2 can no longer be a full Vandal buy, and money is lower overall.
 
