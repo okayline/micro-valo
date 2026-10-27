@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.13 — 2026-10-27 01:00 HST
+
+Five guns, then five shields, take two, plus picture and panel touch-ups.
+
+- Changed: buying goes gun for agent 1 to 5, then shield for agent 1 to 5, then LOCK IN. Clicking a gun buys it for the lit agent and moves to the next one.
+- Added: agents that can't afford the cheapest shield are skipped in the shield part. Clicking a dimmed gun or shield (one you can't afford) moves on to the next agent. Clicking the lit agent, or Space, skips it too.
+- Added: click any agent to go back to it, and right-click an agent to clear its buys and redo them. After everything is done, clicking an agent reopens its shield pick.
+- Changed: a gun or shield is lit only once the lit agent has chosen it this round. In the shield part the guns are dimmed with no highlight, and the green headings of the other part are dimmed.
+- Changed: no outline on a shield before it is bought.
+- Changed: the Ghost picture on the buy board is 20% smaller.
+- Changed: in the agent panels and the enemy row the guns are bigger and the shields smaller. On narrow screens a gun with no shield uses the whole panel width.
+- Removed: selling a gun or shield back by clicking it again.
+- Added: the version label says v1.13.
+- Not changed: the rules, money and prices.
+- Checked: in a browser, played a pistol round of buys with skips, dimmed clicks, going back and shields, at computer and phone width, no console errors.
+
 ## v1.12 — 2026-10-27 00:55 HST
 
 Back to the old clicking, with the lower money kept.
