@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.18 — 2026-10-27 01:45 HST
+
+Round name on the fight screen, and fewer upsets.
+
+- Added: the fight screen title shows the round description, e.g. "ROUND 3: BONUS" (and "ROUND 2: OVERTIME" in overtime).
+- Changed: each point of gun-and-shield power is now worth 7% win chance instead of 5%, so a big underdog wins less often (a 5-point gap goes from 25% to 15%). Equal gear is still 50/50 and the 5% to 95% limits are unchanged.
+- Changed: the version label says v1.18.
+- Not changed: money and prices.
+- Checked: in a browser, the fight screen shows the title and the new percentages, no console errors.
+
 ## v1.17 — 2026-10-27 01:35 HST
 
 Header touch-ups, honest round labels, and buying for an agent you pick.
