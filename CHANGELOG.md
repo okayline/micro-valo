@@ -6,6 +6,7 @@ Round 2 can no longer be a full Vandal buy, and money is lower overall.
 
 - Changed: the round win pays each agent ¤2,000, was ¤3,000. Now an agent that spends on a Ghost in round 1 has about ¤2,500 in round 2, under the ¤2,900 Vandal. Only an agent that spends nothing in round 1 (¤800 + ¤2,000 + ¤200) can afford one.
 - Changed: the loss bonuses are cut to ¤1,300 / ¤1,600 / ¤1,900 per agent for the first, second and third loss in a row (were ¤1,900 / ¤2,400 / ¤2,900), so a win still pays more than any loss.
+- Added: the round type next to the round number at the top: PISTOL ROUND (rounds 1 and 13), BONUS (the round after you won a pistol round), FULL BUY (3 or more agents can afford a Vandal and a light shield, or already hold a Vandal or better), ANTI-ECO (a full buy while all five enemy agents kept only Classics), ECO (3 or more agents are under ¤1,600 and hold only a Classic or Ghost), and HALF BUY for everything else. It uses only your money and the enemy's visible guns, never the enemy's money. Halftime and overtime still show their own words; the last round of the half now adds "· LAST ROUND OF THE HALF" after the type.
 - Not checked: how the new money feels over a full match.
 
 ## v1.4 — 2026-10-26 22:50 HST

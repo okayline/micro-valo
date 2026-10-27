@@ -100,7 +100,7 @@ button{font:inherit;color:inherit}
 .sum small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
 .card .lock{margin-top:12px}
 .card .lock.wait{visibility:hidden}
-@media (max-width:520px){.bal{font-size:16px}.lock.big{font-size:18px;padding:12px 28px}.fr{grid-template-columns:16px 72px 16px 72px 1fr 32px 50px;gap:4px}.fr .w,.fr .l{font-size:19px;letter-spacing:0}.fr .ic svg.g{width:46px}.fr .ic svg.s{width:20px;height:20px}.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(46px,calc(100% - 24px))}.slot .ic svg.s{width:20px;height:20px;margin-left:4px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
+@media (max-width:520px){.cr small{font-size:10px;letter-spacing:.02em;margin-left:4px}.ver{font-size:11px}.bal{font-size:16px}.lock.big{font-size:18px;padding:12px 28px}.fr{grid-template-columns:16px 72px 16px 72px 1fr 32px 50px;gap:4px}.fr .w,.fr .l{font-size:19px;letter-spacing:0}.fr .ic svg.g{width:46px}.fr .ic svg.s{width:20px;height:20px}.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(46px,calc(100% - 24px))}.slot .ic svg.s{width:20px;height:20px;margin-left:4px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
 </style>
 </head>
 <body>
@@ -145,13 +145,14 @@ const $=id=>document.getElementById(id);
 const S={};
 
 function newGame(){
-  Object.assign(S,{played:0,me:0,foe:0,bank:wallets(START),kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,step:'gun',pistol:false,ot:false,half:false,phase:'buy'});
+  Object.assign(S,{bonus:false,bonusNext:false,played:0,me:0,foe:0,bank:wallets(START),kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,step:'gun',pistol:false,ot:false,half:false,phase:'buy'});
   startRound();
 }
 function startRound(){
   const n=S.played+1;
   S.ot=S.me>=12&&S.foe>=12;
   S.half=n===13;
+  S.bonus=S.bonusNext;S.bonusNext=false;   // the round right after you won a pistol round
   S.pistol=n===1||n===13;
   if(S.pistol){S.bank=wallets(START);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)];S.streak=[0,0]}
   if(S.ot){S.bank=wallets(OT);S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)]}
@@ -191,7 +192,17 @@ const icons=(id,l)=>`<div class="ic"><svg class="g" viewBox="0 0 100 40"><path d
 function render(){
   const lossNext=LOSS[Math.min(S.streak[0]+1,3)-1];
   $('money').textContent='NEXT LOSS +¤'+fmt(lossNext);
-  const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':S.pistol?'PISTOL ROUND':S.played===11?'LAST ROUND OF THE HALF':'';
+  // what kind of round this is, from your money and the enemy's visible kept guns (never the enemy bank)
+  const roundType=()=>{
+    if(S.pistol)return 'PISTOL ROUND';
+    if(S.bonus)return 'BONUS';
+    const rdy=S.bank[0].filter((b,i)=>b>=3300||BY[S.kept[0][i]].pw>=5).length;      // can have a Vandal and a light shield
+    const poor=S.bank[0].filter((b,i)=>b<1600&&BY[S.kept[0][i]].price<1600).length;  // can't afford a Spectre
+    if(rdy>=3)return S.kept[1].every(g=>g==='classic')?'ANTI-ECO':'FULL BUY';
+    if(poor>=3)return 'ECO';
+    return 'HALF BUY';
+  };
+  const flag=S.ot?'OVERTIME':S.half?'HALFTIME · CREDITS RESET':roundType()+(S.played===11?' · LAST ROUND OF THE HALF':'');
   $('cr').innerHTML='MICRO VALO<small>ROUND '+(S.played+1)+(flag?' · '+flag:'')+'</small>';
   const X='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="m"><circle cx="6" cy="6" r="4.6"/><path d="M3.6 3.6l4.8 4.8M8.4 3.6l-4.8 4.8"/></svg>';
   const N=Math.max(24,S.hist.length+1);
@@ -267,6 +278,7 @@ function resolve(){
   S.kept[1]=foe.map((id,i)=>res[i].win?'classic':id);
   S.ksh[0]=mesh.map((l,i)=>res[i].win?l:0);
   S.ksh[1]=fsh.map((l,i)=>res[i].win?0:l);
+  S.bonusNext=S.pistol&&won;
   S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
   const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
 
