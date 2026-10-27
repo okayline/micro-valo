@@ -63,6 +63,7 @@ button{font:inherit;color:inherit}
 .cell{min-height:0;background:var(--panel);border:2px solid transparent;display:flex;flex-direction:column;justify-content:space-between;padding:4px 6px;cursor:pointer;position:relative;text-align:left;min-width:0}
 .cell:hover{background:var(--panel-hi)}
 .cell.on{border-color:var(--teal);background:rgba(111,227,196,.16)}
+.cell.next{border:2px dashed var(--teal)}
 .cell.off{opacity:.38;cursor:default}
 .cell.off:hover{background:var(--panel)}
 .cell svg{flex:0 0 auto;width:100%;flex:1 1 0;min-height:0;margin:14px 0 6px;fill:rgba(255,255,255,.85);pointer-events:none}
@@ -202,7 +203,7 @@ function render(){
   const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
     const [col,row]=POS[g.id];
-    const on=S.picks[S.sel]===g.id;
+    const on=S.step==='gun'&&S.picks[S.sel]===g.id;   // the highlight follows what the next click buys
     const owned=g.id===S.kept[0][gi];
     const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy';
     const tags=S.picks.map((p,i)=>p===g.id?i+1:'').filter(Boolean).join(' ');
@@ -211,9 +212,9 @@ function render(){
   let h=[['SIDEARMS',1],['SMGS',2],['RIFLES',3],['SNIPER RIFLES',4]].map(([t,c])=>`<div class="hd" style="grid-column:${c};grid-row:1">${t}</div>`).join('')+GUNS.map(cell).join('');
   const avs=left(S.sel)+shCost(S.sel,S.shp[S.sel]);
   h+='<div class="hd" style="grid-column:5;grid-row:1">ARMOR</div>'+[1,2].map(l=>{
-    const on=S.shp[S.sel]===l,owned=S.ksh[0][S.sel]===l,off=(!owned&&SH[l].price>avs)||S.phase!=='buy';
+    const on=S.step==='shield'&&S.shp[S.sel]===l,owned=S.ksh[0][S.sel]===l,off=(!owned&&SH[l].price>avs)||S.phase!=='buy';
     const tags=S.shp.map((p,i)=>p===l?i+1:'').filter(Boolean).join(' ');
-    return `<button class="cell sh ${on?'on':''} ${off&&!on?'off':''}" data-sh="${l}" style="grid-column:5;grid-row:${l+1}"><svg viewBox="0 0 40 40"><path d="M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z${l===2?' M20 10l7 2.500v6c0 5-3 9-7 11z':''}" fill-rule="evenodd"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(SH[l].price)}</span><span class="nm">${SH[l].name}</span></button>`;
+    return `<button class="cell sh ${on?'on':''} ${S.step==='shield'&&!S.shp[S.sel]&&S.phase==='buy'?'next':''} ${off&&!on?'off':''}" data-sh="${l}" style="grid-column:5;grid-row:${l+1}"><svg viewBox="0 0 40 40"><path d="M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z${l===2?' M20 10l7 2.500v6c0 5-3 9-7 11z':''}" fill-rule="evenodd"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(SH[l].price)}</span><span class="nm">${SH[l].name}</span></button>`;
   }).join('');
   $('board').innerHTML=h;
   $('lock').disabled=S.phase!=='buy';

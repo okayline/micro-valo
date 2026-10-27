@@ -12,6 +12,7 @@ Each agent has its own money now, like the real game.
 - Changed: the next loss bonus sits right under the agents' money panels, and LOCK IN moved under the agents and is much bigger. The money panels use big numbers.
 - Removed: the big money number for the selected agent.
 - Removed: the round number in the top middle.
+- Changed: the highlight on the buy board follows the next click: on the gun when it's time to pick a gun, on the shields (dashed outline if none yet) after a gun is picked.
 - Changed: agents you are not working on are dimmed (their panel and money).
 - Changed: the enemy buys per agent the same way.
 - Changed: in the fight lines, the enemy's shield sits to the right of its gun.
