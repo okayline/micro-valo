@@ -48,9 +48,9 @@ button{font:inherit;color:inherit}
 .lbl.first{margin-top:22px}
 .foes{margin-bottom:6px}
 .foes .slot{cursor:default;padding:5px 6px}
-.slot .ic{display:flex;align-items:center;height:44px}
-.slot .ic svg.g{flex:none;width:min(70px,calc(100% - 52px));height:auto;aspect-ratio:5/2;fill:rgba(255,255,255,.85)}
-.slot .ic svg.s{flex:none;width:44px;height:44px;margin-left:8px;fill:rgba(255,255,255,.85)}
+.slot .ic{display:flex;align-items:center;height:56px}
+.slot .ic svg.g{flex:none;width:min(70px,calc(100% - 64px));height:auto;aspect-ratio:5/2;fill:rgba(255,255,255,.85)}
+.slot .ic svg.s{flex:none;width:56px;height:56px;margin-left:8px;fill:rgba(255,255,255,.85)}
 .board{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:auto 1fr 1fr;gap:6px;margin-bottom:8px}
 .board>.cell[data-g]{min-height:230px}
 .col{display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -192,7 +192,7 @@ function render(){
     h+=r===undefined?'<i class="d'+(i===S.hist.length?' cur':'')+'"></i>':(r===side?'<i>'+X+'</i>':'<i class="d"></i>');
   }return h};
   $('sb').innerHTML=`<div class="sbr foe"><b>ENEMY</b><span class="n">${S.foe}</span><div class="tr">${track(false)}</div></div><div class="sbr me"><b>YOU</b><span class="n">${S.me}</span><div class="tr">${track(true)}</div></div>`;
-  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span><i>¤${fmt(left(i))}</i></button>`).join('');
+  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span><i>BALANCE: ¤${fmt(left(i))}</i></button>`).join('');
   $('foes').innerHTML=S.kept[1].map((id,i)=>`<div class="slot">${icons(id,S.ksh[1][i])}<span>${BY[id].name}</span></div>`).join('');
   const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
