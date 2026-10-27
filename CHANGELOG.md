@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.11 — 2026-10-27 00:50 HST
+
+Less money, a small step down.
+
+- Changed: the round win pays each agent ¤1,700, was ¤2,000.
+- Changed: the loss bonuses are ¤1,100 / ¤1,400 / ¤1,700 for the first, second and third loss in a row (were ¤1,300 / ¤1,600 / ¤1,900). A win still pays at least as much as any loss.
+- Result: after a pistol round where every agent bought a Ghost, a win leaves ¤2,200 each in round 2 (was ¤2,500) and a loss leaves ¤1,400 (was ¤1,600). A winner can still buy a Spectre and a light shield, with little to spare. A loser can't buy a Spectre.
+- Added: the version label says v1.11.
+- Not checked: how it feels over a full match. In a simulation of about 3,000 matches, rounds stay about 20 long, the average wallet drops from about ¤3,160 to about ¤2,800, and Operators go from 18% to 12% of guns bought.
+
 ## v1.10 — 2026-10-27 00:45 HST
 
 New buying order: five guns, then five shields.
