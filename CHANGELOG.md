@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.7 — 2026-10-27 00:20 HST
+
+New Spectre and Operator pictures.
+
+- Changed: the Spectre is redrawn from the real one: short stock on a thin tube, long body, thick suppressor, and an angled magazine with a square-cut end.
+- Changed: the Operator is redrawn from the real one: long thin barrel, scope on top with a wider front end, raised cheek piece on the stock, and a rail under the front.
+- Added: the version label says v1.7.
+- Not changed: the rules, money and prices.
+- Checked: in a browser at computer and phone width, no console errors.
+
 ## v1.6 — 2026-10-26 23:00 HST
 
 - Changed: BONUS now means you won the last round and none of your five guns is a Vandal, Phantom or Operator (all cost under ¤2,900). It used to mean only the round after a won pistol round, which is still covered, along with a win with cheap guns later in the match.
