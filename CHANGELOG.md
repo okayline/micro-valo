@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.16 — 2026-10-27 01:30 HST
+
+Honest round label in the header.
+
+- Fixed: the header said FULL BUY when only 3 of 5 agents could afford one. FULL BUY (and ANTI-ECO) now needs all 5 agents to hold, or be able to afford, a rifle plus a light shield. Otherwise it says HALF BUY, or ECO when 3 or more can't afford a Spectre.
+- Changed: the version label says v1.16.
+- Not changed: the rules, money and prices.
+- Checked: in a browser with five made-up set-ups, labels were right, no console errors.
+
 ## v1.15 — 2026-10-27 01:25 HST
 
 Header touch-up.
