@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.6 — 2026-10-26 23:05 HST
+## v1.6 — 2026-10-26 23:00 HST
 
 - Changed: BONUS now means you won the last round and none of your five guns is a Vandal, Phantom or Operator (all cost under ¤2,900). It used to mean only the round after a won pistol round, which is still covered, along with a win with cheap guns later in the match.
 - Added: the version label says v1.6.
