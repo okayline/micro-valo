@@ -48,6 +48,7 @@ button{font:inherit;color:inherit}
 .bal{background:var(--panel);border:1px solid var(--line);text-align:center;padding:6px 0;font-size:24px;line-height:1;font-weight:600;letter-spacing:.04em;color:var(--teal)}
 .nl{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:.08em}
 .lock.big{font-size:24px;padding:16px 48px;margin-top:6px;clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%)}
+#slots .slot:not(.on),.bal.dim{opacity:.45}
 .lbl.first{margin-top:22px}
 .foes{margin-bottom:6px}
 .foes .slot{cursor:default;padding:5px 6px}
@@ -196,7 +197,7 @@ function render(){
   }return h};
   $('sb').innerHTML=`<div class="sbr foe"><b>ENEMY</b><span class="n">${S.foe}</span><div class="tr">${track(false)}</div></div><div class="sbr me"><b>YOU</b><span class="n">${S.me}</span><div class="tr">${track(true)}</div></div>`;
   $('albl').innerHTML=S.picks.map((_,i)=>`<div class="hd">AGENT ${i+1}</div>`).join('');
-  $('bal').innerHTML=S.picks.map((_,i)=>`<div class="bal">¤${fmt(left(i))}</div>`).join('');
+  $('bal').innerHTML=S.picks.map((_,i)=>`<div class="bal${i===S.sel?'':' dim'}">¤${fmt(left(i))}</div>`).join('');
   $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span></button>`).join('');
   $('foes').innerHTML=S.kept[1].map((id,i)=>`<div class="slot">${icons(id,S.ksh[1][i])}<span>${BY[id].name}</span></div>`).join('');
   const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
