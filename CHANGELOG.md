@@ -6,6 +6,7 @@ Left-click sells, like the real buy menu.
 
 - Changed: clicking the gun your current agent just bought sells it back (the agent goes back to its round-start gun and the money returns). Clicking a different gun still skips the shield and goes on the next agent.
 - Changed: on phone width the shield names (LIGHT / HEAVY SHIELDS) were bigger than the gun names; they now match.
+- Added: the version number ("v1.4") in small grey text at the top right of the screen.
 - Fixed: the gun you just bought stays highlighted (it was not lit after buying, so it looked like the click did nothing). The shields get an outline too when a shield is the next buy.
 - Removed: clicking the same gun again no longer buys it for the next agent.
 - Not checked: how it feels to play. Checked in a browser, no console errors.
