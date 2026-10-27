@@ -130,7 +130,7 @@ const $=id=>document.getElementById(id);
 const S={};
 
 function newGame(){
-  Object.assign(S,{played:0,me:0,foe:0,bank:[4000,4000],kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,pistol:false,ot:false,half:false,phase:'buy'});
+  Object.assign(S,{played:0,me:0,foe:0,bank:[4000,4000],kept:[Array(5).fill('classic'),Array(5).fill('classic')],ksh:[Array(5).fill(0),Array(5).fill(0)],streak:[0,0],picks:[],shp:[],hist:[],sel:0,step:'gun',pistol:false,ot:false,half:false,phase:'buy'});
   startRound();
 }
 function startRound(){
@@ -140,7 +140,7 @@ function startRound(){
   S.pistol=n===1||n===13;
   if(S.pistol){S.bank=[4000,4000];S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)];S.streak=[0,0]}
   if(S.ot){S.bank=[25000,25000];S.kept=[Array(5).fill('classic'),Array(5).fill('classic')];S.ksh=[Array(5).fill(0),Array(5).fill(0)]}
-  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.phase='buy';
+  S.picks=[...S.kept[0]];S.shp=[...S.ksh[0]];S.sel=0;S.step='gun';S.phase='buy';
   render();
 }
 const cost=(i,id)=>id===S.kept[0][i]?0:BY[id].price;
@@ -148,21 +148,23 @@ const shCost=(i,l)=>l===S.ksh[0][i]?0:SH[l].price;
 const spent=()=>S.picks.reduce((a,id,i)=>a+cost(i,id)+shCost(i,S.shp[i]),0);
 const left=()=>S.bank[0]-spent();
 
+// Buy order: gun, shield, gun, shield... A gun stays on its slot; a shield finishes the slot.
+// A gun clicked while the slot waits for a shield skips the shield and goes to the next slot.
+const gunSlot=()=>S.step==='shield'?(S.sel+1)%5:S.sel;
 function pick(id){
   if(S.phase!=='buy')return;
-  const i=S.sel,g=BY[id];
+  const i=gunSlot(),g=BY[id];
   if(S.pistol&&g.grp!=='side')return;
-  if(S.picks[i]===id){S.picks[i]=S.kept[0][i];render();return}
   if(cost(i,id)>left()+cost(i,S.picks[i]))return;
-  S.picks[i]=id;S.sel=(i+1)%5;render();
+  S.picks[i]=id;S.sel=i;S.step='shield';render();
 }
 
 function pickShield(l){
   if(S.phase!=='buy')return;
   const i=S.sel;
-  if(S.shp[i]===l){S.shp[i]=S.ksh[0][i];render();return}
+  if(S.shp[i]===l&&l!==S.ksh[0][i]){S.shp[i]=S.ksh[0][i];render();return}
   if(shCost(i,l)>left()+shCost(i,S.shp[i]))return;
-  S.shp[i]=l;render();
+  S.shp[i]=l;S.sel=(i+1)%5;S.step='gun';render();
 }
 
 function render(){
@@ -181,11 +183,11 @@ function render(){
   $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}"><span>${lab(id,S.shp[i])}</span><i>${cost(i,id)+shCost(i,S.shp[i])?'¤'+fmt(cost(i,id)+shCost(i,S.shp[i])):(id!=='classic'||S.shp[i])?'KEPT':'FREE'}</i></button>`).join('');
   const SHD='M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z';
   $('foes').innerHTML=S.kept[1].map((id,i)=>{const l=S.ksh[1][i];return `<div class="slot"><div class="ic"><svg class="g" viewBox="0 0 100 40"><path d="${SIL[BY[id].sil]}"/></svg>${l?`<svg class="s" viewBox="0 0 40 40"><path d="${SHD}${l===2?' M20 10l7 2.5v6c0 5-3 9-7 11z':''}" fill-rule="evenodd"/></svg>`:''}</div><span>${BY[id].name}</span></div>`}).join('');
-  const avail=left()+cost(S.sel,S.picks[S.sel]);
+  const gi=gunSlot(),avail=left()+cost(gi,S.picks[gi]);
   const cell=(g)=>{
     const [col,row]=POS[g.id];
     const on=S.picks[S.sel]===g.id;
-    const owned=g.id===S.kept[0][S.sel];
+    const owned=g.id===S.kept[0][gi];
     const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy';
     const tags=S.picks.map((p,i)=>p===g.id?i+1:'').filter(Boolean).join(' ');
     return `<button class="cell ${on?'on':''} ${off&&!on?'off':''}" data-g="${g.id}" style="grid-column:${col};${row?`grid-row:${row};min-height:110px`:'grid-row:2/4'}"><svg viewBox="0 0 100 40"><path d="${SIL[g.sil]}"/></svg>${tags?`<span class="tag">${tags}</span>`:''}<span class="sp"></span><span class="px">${owned?'<span class="own">OWNED</span>':'¤'+fmt(g.price)}</span><span class="nm">${g.name}</span></button>`;
@@ -270,11 +272,11 @@ function resolve(){
 }
 
 $('board').addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
-$('slots').addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c&&S.phase==='buy'){S.sel=+c.dataset.s;render()}});
+$('slots').addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c&&S.phase==='buy'){S.sel=+c.dataset.s;S.step='gun';render()}});
 $('lock').onclick=()=>{if(S.phase==='buy')resolve()};
 document.addEventListener('keydown',e=>{
   if(S.phase==='buy'){
-    if(e.key>='1'&&e.key<='5'){S.sel=+e.key-1;render()}
+    if(e.key>='1'&&e.key<='5'){S.sel=+e.key-1;S.step='gun';render()}
     else if(e.key==='Enter')resolve();
   }else if(e.key==='Enter'){const n=$('next');if(n)n.click()}
 });

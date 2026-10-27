@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2 — 2026-10-26 21:55 HST
+
+Faster buying: click gun, shield, gun, shield... and the slots fill in order.
+
+- Changed: clicking a gun now stays on that slot. Clicking a shield finishes the slot and moves to the next one.
+- Changed: to skip a shield, click the next gun. It goes into the next slot.
+- Removed: buying a gun no longer jumps straight to the next slot.
+- Removed: clicking a slot's gun again no longer undoes it (to change a gun, pick the slot and click another gun). Clicking a shield you bought this round still undoes it.
+- Not checked: how it feels to play. Checked in a browser over two rounds, with no console errors.
+
 ## v1.1 — 2026-10-26 21:35 HST
 
 New buy screen layout and gun pictures. No change to the rules.
