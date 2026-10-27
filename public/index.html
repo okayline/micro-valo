@@ -111,7 +111,6 @@ button{font:inherit;color:inherit}
   <div class="board" id="board"></div>
   <div class="lbl" style="margin-top:8px"><div class="hd">AGENT 1</div><div class="hd">AGENT 2</div><div class="hd">AGENT 3</div><div class="hd">AGENT 4</div><div class="hd">AGENT 5</div></div>
   <div class="slots" id="slots"></div>
-  <div class="note">1-5 pick a slot, right-click a slot to undo it, Enter locks in.</div>
 </div>
 <div class="ov" id="ov"><div class="card" id="card"></div></div>
 <script>
@@ -194,7 +193,7 @@ function render(){
     h+=r===undefined?'<i class="d'+(i===S.hist.length?' cur':'')+'"></i>':(r===side?'<i>'+X+'</i>':'<i class="d"></i>');
   }return h};
   $('sb').innerHTML=`<div class="sbr foe"><b>ENEMY</b><span class="n">${S.foe}</span><div class="tr">${track(false)}</div></div><div class="sbr me"><b>YOU</b><span class="n">${S.me}</span><div class="tr">${track(true)}</div></div>`;
-  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span><i>${cost(i,id)+shCost(i,S.shp[i])?'¤'+fmt(cost(i,id)+shCost(i,S.shp[i])):(id!=='classic'||S.shp[i])?'KEPT':'FREE'} · ¤${fmt(left(i))} left</i></button>`).join('');
+  $('slots').innerHTML=S.picks.map((id,i)=>`<button class="slot ${i===S.sel?'on':''}" data-s="${i}">${icons(id,S.shp[i])}<span>${BY[id].name}</span><i>¤${fmt(left(i))}</i></button>`).join('');
   $('foes').innerHTML=S.kept[1].map((id,i)=>`<div class="slot">${icons(id,S.ksh[1][i])}<span>${BY[id].name}</span></div>`).join('');
   const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
