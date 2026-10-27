@@ -156,6 +156,8 @@ function pick(id){
   if(S.phase!=='buy')return;
   const i=gunSlot(),g=BY[id];
   if(S.pistol&&g.grp!=='side')return;
+  // clicking the gun an agent already bought this round undoes it
+  if(S.step==='gun'&&S.picks[i]===id&&id!==S.kept[0][i]){S.picks[i]=S.kept[0][i];render();return}
   if(cost(i,id)>left()+cost(i,S.picks[i]))return;
   S.picks[i]=id;S.sel=i;S.step='shield';render();
 }

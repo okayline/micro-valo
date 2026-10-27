@@ -13,7 +13,7 @@ Faster buying: click gun, shield, gun, shield... and the slots fill in order.
 - Changed: the "SLOT 1" to "SLOT 5" labels are now "AGENT 1" to "AGENT 5".
 - Changed: the hint line under the slots mentions right-click.
 - Removed: buying a gun no longer jumps straight to the next slot.
-- Removed: clicking a slot's gun again no longer undoes it (to change a gun, pick the slot and click another gun). Clicking a shield you bought this round still undoes it.
+- Changed: after picking an agent, clicking the gun it bought this round undoes it (back to its round-start gun). Clicking a shield you bought this round also undoes it.
 - Not checked: how it feels to play. Checked in a browser over two rounds, with no console errors.
 
 ## v1.1 — 2026-10-26 21:35 HST
