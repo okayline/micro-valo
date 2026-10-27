@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.12 — 2026-10-27 00:55 HST
+
+Back to the old clicking, with the lower money kept.
+
+- Changed: buying goes back to gun, shield, gun, shield, like v1.9. Clicking a gun stays on that agent, clicking a shield finishes it and moves to the next agent, and clicking the next gun skips the shield.
+- Added: clicking a gun or shield you bought this round sells it back again, and right-click undoes an agent's buys, as before.
+- Removed: the "five guns, then five shields" order from v1.10, and the Space key skip.
+- Kept: the lower money from v1.11 (win ¤1,700, losses ¤1,100 / ¤1,400 / ¤1,700).
+- Added: the version label says v1.12.
+- Checked: in a browser, played a pistol round of buys, no console errors.
+
 ## v1.11 — 2026-10-27 00:50 HST
 
 Less money, a small step down.
