@@ -206,7 +206,7 @@ function render(){
   const gi=gunSlot(),avail=left(gi)+cost(gi,S.picks[gi]);
   const cell=(g)=>{
     const [col,row]=POS[g.id];
-    const on=S.step==='gun'&&S.picks[S.sel]===g.id;   // the highlight follows what the next click buys
+    const on=S.picks[S.sel]===g.id;   // the agent's current gun stays lit, so you can click it to sell it
     const owned=g.id===S.kept[0][gi];
     const off=(S.pistol&&g.grp!=='side')||(!owned&&g.price>avail)||S.phase!=='buy';
     const tags=S.picks.map((p,i)=>p===g.id?i+1:'').filter(Boolean).join(' ');
