@@ -15,7 +15,9 @@ Faster buying: click gun, shield, gun, shield... and the slots fill in order.
 - Changed: each fight line shows your gun and shield pictures on the left and the enemy's on the right, turned to face yours, in place of the names.
 - Removed: the gun names and "+L" / "+H" text from the fight lines.
 - Changed: the fight pictures sit tight around "vs": yours lean in from the left, the enemy's from the right.
-- Changed: the fight box shows one thing every half second: the box, the round title, each fight line then its WIN or LOSS, the round result, the money earned, then the button (14 beats, was 6). Enter does nothing until the button shows.
+- Changed: the fight box opens showing the round title, the line numbers, your guns, "vs", the words ROUND and YOU EARNED, and a dim Next Round button. Then one thing shows each second: each enemy side and its %, its WIN or LOSS, the round score, the money, and the button lights up. Enter and clicks do nothing until then.
+- Changed: on the last round of a match, the title turns into VICTORY or DEFEAT and the button into PLAY AGAIN when the button lights up.
+- Removed: the separate "VICTORY / YOU WIN THE MATCH" result lines.
 - Changed: the hint line under the slots mentions right-click.
 - Removed: buying a gun no longer jumps straight to the next slot.
 - Changed: after picking an agent, clicking the gun it bought this round undoes it (back to its round-start gun). Clicking a shield you bought this round also undoes it.

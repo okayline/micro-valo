@@ -265,25 +265,26 @@ function resolve(){
   S.played++;S.hist.push(won);if(won)S.me++;else S.foe++;
   const over=Math.max(S.me,S.foe)>=13&&Math.abs(S.me-S.foe)>=2;
 
-  // The box opens at full size with everything hidden, then shows one thing per beat:
-  // title, then each fight line and its WIN/LOSS, then the result, the money, and the button.
+  // The box opens at full size showing the round title, line numbers, your guns, "vs", the
+  // ROUND / YOU EARNED labels and a dim button. Each beat then reveals one more thing:
+  // each enemy side, its WIN/LOSS, the round score, the money, and the button lights up.
   const w=S.me>S.foe;
-  const head=over?(w?'VICTORY':'DEFEAT')+' · '+S.me+'–'+S.foe:(won?'ROUND WON':'ROUND LOST')+' · '+wins+'–'+(5-wins);
-  const sub=over?(w?'YOU WIN THE MATCH':'THE ENEMY WINS THE MATCH'):'YOU EARNED ¤'+fmt(gain[0]);
   $('ov').classList.add('show');
-  $('card').innerHTML='<h2 class="hide" id="ttl">ROUND '+S.played+'</h2><div id="rows">'
-    +res.map((r,i)=>`<div class="fr"><b class="hide" id="fn${i}">${i+1}</b><span class="hide" id="fa${i}">${r.a}</span><span class="vs hide" id="fv${i}">vs</span><span class="foe hide" id="fb${i}">${r.b}</span><span></span><span class="pc hide" id="fp${i}">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'} hide" id="fw${i}">${r.win?'WIN':'LOSS'}</span></div>`).join('')
-    +`</div><div class="sum"><span class="hide" id="sh">${head}</span><small class="hide" id="ss">${sub}</small></div><button class="lock hide" id="next">${over?'PLAY AGAIN':'NEXT ROUND'}</button>`;
-  const beats=[['ttl']];
-  res.forEach((r,i)=>beats.push(['fn'+i,'fa'+i,'fv'+i,'fb'+i,'fp'+i],['fw'+i]));
-  beats.push(['sh'],['ss'],['next']);
-  const BEAT=500;
+  $('card').innerHTML='<h2 id="ttl">ROUND '+S.played+'</h2><div id="rows">'
+    +res.map((r,i)=>`<div class="fr"><b>${i+1}</b><span>${r.a}</span><span class="vs">vs</span><span class="foe hide" id="fb${i}">${r.b}</span><span></span><span class="pc hide" id="fp${i}">${Math.round(r.chance*100)}%</span><span class="${r.win?'w':'l'} hide" id="fw${i}">${r.win?'WIN':'LOSS'}</span></div>`).join('')
+    +`</div><div class="sum">ROUND <span class="hide" id="sh">${won?'WON':'LOST'} · ${wins}–${5-wins}</span><small>YOU EARNED <span class="hide" id="ss">¤${fmt(gain[0])}</span></small></div><button class="lock" id="next" disabled>NEXT ROUND</button>`;
+  const beats=[];
+  res.forEach((r,i)=>beats.push(['fb'+i,'fp'+i],['fw'+i]));
+  beats.push(['sh'],['ss']);
+  const BEAT=1000;
   beats.forEach((ids,k)=>setTimeout(()=>ids.forEach(id=>$(id).classList.remove('hide')),BEAT*(k+1)));
   setTimeout(()=>{
     const b=$('next');
+    if(over){$('ttl').textContent=(w?'VICTORY':'DEFEAT')+' · '+S.me+'–'+S.foe;b.textContent='PLAY AGAIN'}
+    b.disabled=false;
     b.onclick=over?()=>{$('ov').classList.remove('show');newGame()}:()=>{$('ov').classList.remove('show');startRound()};
     b.focus();
-  },BEAT*beats.length);
+  },BEAT*(beats.length+1));
 }
 
 $('board').addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c)pick(c.dataset.g);const d=e.target.closest('[data-sh]');if(d)pickShield(+d.dataset.sh)});
