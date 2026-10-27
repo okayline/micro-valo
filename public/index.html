@@ -116,7 +116,7 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.15</span>
+    <span class="ver">v1.16</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -217,9 +217,9 @@ function render(){
   const roundType=()=>{
     if(S.pistol)return 'PISTOL ROUND';
     if(S.hist[S.hist.length-1]===true&&S.kept[0].every(g=>BY[g].price<2900))return 'BONUS';   // won last round and still holding only cheap guns
-    const rdy=S.bank[0].filter((b,i)=>b>=3300||BY[S.kept[0][i]].pw>=5).length;      // can have a Vandal and a light shield
+    const rdy=S.bank[0].filter((b,i)=>BY[S.kept[0][i]].pw>=5?(S.ksh[0][i]>0||b>=SH[1].price):b>=3300).length;   // has, or can buy, a rifle and a light shield
     const poor=S.bank[0].filter((b,i)=>b<1600&&BY[S.kept[0][i]].price<1600).length;  // can't afford a Spectre
-    if(rdy>=3)return S.kept[1].every(g=>g==='classic')?'ANTI-ECO':'FULL BUY';
+    if(rdy===5)return S.kept[1].every(g=>g==='classic')?'ANTI-ECO':'FULL BUY';
     if(poor>=3)return 'ECO';
     return 'HALF BUY';
   };
