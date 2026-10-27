@@ -116,7 +116,7 @@ button{font:inherit;color:inherit}
 <div class="wrap">
   <div class="top">
     <div class="cr" id="cr"></div>
-    <span class="ver">v1.19</span>
+    <span class="ver">v1.20</span>
   </div>
   <div class="lbl first"><div class="hd">ENEMY 1</div><div class="hd">ENEMY 2</div><div class="hd">ENEMY 3</div><div class="hd">ENEMY 4</div><div class="hd">ENEMY 5</div></div>
   <div class="slots foes" id="foes"></div>
@@ -310,7 +310,7 @@ function resolve(){
   const w=S.me>S.foe;
   $('ov').classList.add('show');
   $('card').innerHTML='<h2 id="ttl">ROUND '+S.played+(S.prevType?': '+S.prevType:S.ot?': OVERTIME':'')+'</h2><div id="rows">'
-    +res.map((r,i)=>`<div class="fr"><b>${i+1}</b><span>${r.a}</span><span class="vs">vs</span><span class="foe hide" id="fb${i}">${r.b}</span><span></span><span class="pc hide" id="fp${i}"></span><span class="${r.win?'w':'l'} hide" id="fw${i}">${r.win?'WIN':'LOSS'}</span></div>`).join('')
+    +res.map((r,i)=>`<div class="fr"><b>${i+1}</b><span>${r.a}</span><span class="vs">vs</span><span class="foe hide" id="fb${i}">${r.b}</span><span></span><span class="pc hide" id="fp${i}"></span><span class="${r.win?'w':'l'} hide" id="fw${i}">${r.win?(r.chance<.4?'WIN?':'WIN'):'LOSS'}</span></div>`).join('')
     +`</div><div style="display:flex;align-items:center;gap:12px"><div class="sum" style="flex:1">ROUND <span class="hide" id="sh">${won?'WON':'LOST'} · ${wins}–${5-wins}</span><small>YOU EARNED <span class="hide" id="ss">¤${fmt(gain[0])}</span></small></div><button class="lock" id="next" disabled style="margin-top:12px">NEXT ROUND</button></div>`;
   const beats=[];
   res.forEach((r,i)=>beats.push(['fb'+i,'fp'+i],['fw'+i]));

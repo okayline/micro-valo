@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.20 — 2026-10-27 02:05 HST
+
+- Added: an upset win shows "WIN?" instead of "WIN" on the fight screen (a win when the win chance was under 40%).
+- Changed: the version label says v1.20.
+- Not changed: the odds, money and prices.
+- Checked: in a browser, forced upset wins show "WIN?" and fit at computer and phone width, no console errors.
+
 ## v1.19 — 2026-10-27 01:55 HST
 
 - Removed: the win-chance percentages on the fight screen. The odds themselves are unchanged.
