@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.21 — 2026-10-27 02:10 HST
+
+- Added: an upset loss shows "LOSS?" instead of "LOSS" on the fight screen (a loss when the win chance was over 60%), matching "WIN?".
+- Changed: the version label says v1.21.
+- Not changed: the odds, money and prices.
+- Checked: in a browser, forced upset losses show "LOSS?" and fit at computer and phone width, no console errors.
+
 ## v1.20 — 2026-10-27 02:05 HST
 
 - Added: an upset win shows "WIN?" instead of "WIN" on the fight screen (a win when the win chance was under 40%).
