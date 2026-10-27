@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.3 — 2026-10-26 22:25 HST
+## v1.3 — 2026-10-26 22:40 HST
 
 Each agent has its own money now, like the real game.
 
