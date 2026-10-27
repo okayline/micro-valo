@@ -49,8 +49,8 @@ button{font:inherit;color:inherit}
 .foes{margin-bottom:6px}
 .foes .slot{cursor:default;padding:5px 6px}
 .slot .ic{display:flex;align-items:center;height:44px}
-.slot .ic svg.g{width:70px;height:28px;fill:rgba(255,255,255,.85)}
-.slot .ic svg.s{width:44px;height:44px;margin-left:8px;fill:rgba(255,255,255,.85)}
+.slot .ic svg.g{flex:none;width:min(70px,calc(100% - 52px));height:auto;aspect-ratio:5/2;fill:rgba(255,255,255,.85)}
+.slot .ic svg.s{flex:none;width:44px;height:44px;margin-left:8px;fill:rgba(255,255,255,.85)}
 .board{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:auto 1fr 1fr;gap:6px;margin-bottom:8px}
 .board>.cell[data-g]{min-height:230px}
 .col{display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -86,7 +86,7 @@ button{font:inherit;color:inherit}
 .sum{margin-top:12px;font-size:18px;letter-spacing:.08em;min-height:44px}
 .sum small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
 .card .lock{margin-top:12px}
-@media (max-width:520px){.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:46px;height:18px}.slot .ic svg.s{width:30px;height:30px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
+@media (max-width:520px){.slot{padding:8px 4px}.slot span{font-size:12px;letter-spacing:0}.foes .slot span{font-size:12px}.slot .ic svg.g{width:min(46px,calc(100% - 24px))}.slot .ic svg.s{width:20px;height:20px;margin-left:4px}.slot .ic{height:30px}.lbl .hd{font-size:8px;letter-spacing:0}.cr{font-size:24px}.nm,.px{font-size:11px}.hd{font-size:8px;letter-spacing:0}.cell{padding:3px 4px}.board>.cell[data-g]{min-height:190px}}
 </style>
 </head>
 <body>
@@ -100,7 +100,7 @@ button{font:inherit;color:inherit}
   <div class="slots foes" id="foes"></div>
   <div class="sb" id="sb"></div>
   <div class="board" id="board"></div>
-  <div class="lbl" style="margin-top:8px"><div class="hd">SLOT 1</div><div class="hd">SLOT 2</div><div class="hd">SLOT 3</div><div class="hd">SLOT 4</div><div class="hd">SLOT 5</div></div>
+  <div class="lbl" style="margin-top:8px"><div class="hd">AGENT 1</div><div class="hd">AGENT 2</div><div class="hd">AGENT 3</div><div class="hd">AGENT 4</div><div class="hd">AGENT 5</div></div>
   <div class="slots" id="slots"></div>
   <div class="note">1-5 pick a slot, right-click a slot to undo it, Enter locks in.</div>
 </div>
