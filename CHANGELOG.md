@@ -8,6 +8,7 @@ Each agent has its own money now, like the real game.
 - Changed: per agent: round win ¤3,000, losses in a row ¤1,900 / ¤2,400 / ¤2,900, cap ¤9,000, overtime ¤5,000. The ¤200 fight bonus goes only to the agent that won its fight.
 - Changed: each agent panel shows only its money left, not what its gun and shield cost. The big number at the top shows the selected agent's money.
 - Changed: the enemy buys per agent the same way.
+- Changed: in the fight lines, the enemy's shield sits to the right of its gun.
 - Removed: the hint line under the agents ("1-5 pick a slot..."). Keys 1-5, Enter and right-click still work.
 - Removed: the shared bank (start ¤4,000, win ¤15,000, cap ¤45,000) and the enemy's even / stack / save styles.
 - Not checked: how it feels to play. Checked in a browser over nine rounds with no console errors.
